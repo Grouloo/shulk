@@ -1,0 +1,19 @@
+{
+  "name": "monad-o",
+  "version": "1.0.0",
+  "description": "Attempt to bring functionnal programming concepts to TypeScript",
+  "main": "lib/index.js",
+  "author": "Elliott",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc --watch",
+    "test": "tsc && jest"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.6.1",
+    "jest": "^29.6.1",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.1.6"
+  }
+}
