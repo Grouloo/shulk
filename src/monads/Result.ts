@@ -1,60 +1,40 @@
+import match from '../instructions/match'
+import State from './State'
+
 const INVALID_WRAPPED_VALUE = 'Invalid wrapped value'
 
-export class Result<Err, Succ> {
-	constructor(
-		public isSuccess: boolean,
-		protected failure: Err | undefined,
-		protected success: Succ | undefined,
-	) {}
+type Failure<ErrType> = { val: ErrType; _state: 'Failure' }
+type Success<OkType> = { val: OkType; _state: 'Success' }
+export type Result<ErrType, OkType> = Failure<ErrType> | Success<OkType>
 
-	match<T, P>({
-		failure,
-		success,
-	}: {
-		failure: (val: Err) => T
-		success: (val: Succ) => P
-	}) {
-		if (!this.isSuccess && this.failure !== undefined) {
-			return failure(this.failure)
-		}
+export const ResultImpl = State<{
+	Failure: <ErrType>(obj: { val: ErrType }) => Failure<ErrType>
+	Success: <OkType>(obj: { val: OkType }) => Success<OkType>
+}>()
 
-		if (this.isSuccess && this.success !== undefined) {
-			return success(this.success)
-		}
-
-		throw Error(INVALID_WRAPPED_VALUE)
-	}
-
-	unwrap(): Succ {
-		return this.match({
-			failure(err) {
-				throw err
-			},
-			success: (val) => val,
-		})
-	}
-
-	safeUnwrap(): Err | Succ {
-		return this.match({
-			failure: (err) => err,
-			success: (val) => val,
-		})
-	}
-
-	unwrapOr<T>(otherwise: T) {
-		return this.match({
-			failure: () => otherwise,
-			success: (val) => val,
-		})
-	}
+export function unwrap<ErrType, OkType>(
+	result: Result<ErrType, OkType>,
+): OkType {
+	return ResultImpl.match(result).case({
+		Failure: () => {
+			throw result.val as ErrType
+		},
+		Success: () => result.val as OkType,
+	})
 }
 
-export const failure = <L>(val: L): Result<L, never> => {
-	return new Result<L, never>(false, val, undefined)
+export function unwrapOrElse<ErrType, OkType, T>(
+	result: Result<ErrType, OkType>,
+	orElse: T,
+): OkType | T {
+	return ResultImpl.match(result).case({
+		Failure: () => orElse,
+		Success: () => result.val as OkType,
+	})
 }
 
-export const success = <R>(val: R): Result<never, R> => {
-	return new Result<never, R>(true, undefined, val)
-}
+export const Failure = <ErrType>(err: ErrType): Result<ErrType, never> =>
+	ResultImpl.Failure({ val: err })
 
-export type PromisedResult<Err, Succ> = Promise<Result<Err, Succ>>
+export const Success = <OkType>(val: OkType): Result<never, OkType> =>
+	ResultImpl.Success({ val })

@@ -26,7 +26,7 @@ function emotionIndex(emotion: Emotion) {
 	})
 }
 
-describe('with statement related tests', () => {
+describe('with Statement related tests', () => {
 	it('should return ":D" when HAPPY', () => {
 		expect(emotion2smiley(Emotion.HAPPY)).toBe(':D')
 	})
@@ -40,7 +40,7 @@ describe('with statement related tests', () => {
 	})
 })
 
-describe('case statement related tests', () => {
+describe('case Statement related tests', () => {
 	it('should return right index when HAPPY', () => {
 		expect(emotionIndex(Emotion.HAPPY)).toBe(
 			`Index for happy is ${Emotion.HAPPY}`,
