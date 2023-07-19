@@ -1,25 +1,33 @@
-import match from '../instructions/match'
 import State from './State'
+import { Struct } from './Struct'
 
 const INVALID_WRAPPED_VALUE = 'Invalid wrapped value'
 
-type Failure<ErrType> = { val: ErrType; _state: 'Failure' }
-type Success<OkType> = { val: OkType; _state: 'Success' }
-export type Result<ErrType, OkType> = Failure<ErrType> | Success<OkType>
+type Failure<ErrType> = { val: ErrType }
+type Success<OkType> = { val: OkType }
+export type Result<ErrType, OkType> = {
+	val: ErrType | OkType
+	_state: 'Ok' | 'Err'
+}
+
+// export const ResultImpl = State<{
+// 	Failure: <ErrType>(obj: { val: ErrType }) => Failure<ErrType>
+// 	Success: <OkType>(obj: { val: OkType }) => Success<OkType>
+// }>()
 
 export const ResultImpl = State<{
-	Failure: <ErrType>(obj: { val: ErrType }) => Failure<ErrType>
-	Success: <OkType>(obj: { val: OkType }) => Success<OkType>
+	Err: Struct<{ val: any }>
+	Ok: Struct<{ val: any }>
 }>()
 
 export function unwrap<ErrType, OkType>(
 	result: Result<ErrType, OkType>,
 ): OkType {
 	return ResultImpl.match(result).case({
-		Failure: () => {
+		Err: () => {
 			throw result.val as ErrType
 		},
-		Success: () => result.val as OkType,
+		Ok: () => result.val as OkType,
 	})
 }
 
@@ -28,13 +36,13 @@ export function unwrapOrElse<ErrType, OkType, T>(
 	orElse: T,
 ): OkType | T {
 	return ResultImpl.match(result).case({
-		Failure: () => orElse,
-		Success: () => result.val as OkType,
+		Err: () => orElse,
+		Ok: () => result.val as OkType,
 	})
 }
 
-export const Failure = <ErrType>(err: ErrType): Result<ErrType, never> =>
-	ResultImpl.Failure({ val: err })
+export const Err = <ErrType>(err: ErrType): Result<ErrType, never> =>
+	ResultImpl.Err({ val: err })
 
-export const Success = <OkType>(val: OkType): Result<never, OkType> =>
-	ResultImpl.Success({ val })
+export const Ok = <OkType>(val: OkType): Result<never, OkType> =>
+	ResultImpl.Ok({ val })

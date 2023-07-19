@@ -5,16 +5,13 @@ type State = {
 	[x: string]: Struct<any>
 }
 
-// type StructConstructor<> = {}
+type StateRes<T extends State> = {
+	[x in keyof T]: Struct<ReturnType<T[x]>, { _state: x }>
+}
 
-// export type Struct<Q extends {}, Impl = {}, T extends string = any> = (
-// 	obj: Q,
-// ) => Q & StructInstance<T> & Impl
-
-//type Impl<D> = { [x: string]: (self: Struct<D>) => unknown }
 type StructInstance<StateKey> = { _state: StateKey }
 
-export default function state<T extends State>(): T & {
+export default function state<T extends State>(): StateRes<T> & {
 	match: (obj: StructInstance<keyof T>) => MatchStatement<keyof T>
 } {
 	return new Proxy(
@@ -33,7 +30,7 @@ export default function state<T extends State>(): T & {
 				return (obj: T[typeof prop]) => ({ ...obj, _state: prop })
 			},
 		},
-	) as T & {
+	) as StateRes<T> & {
 		match: (obj: StructInstance<keyof T>) => MatchStatement<keyof T>
 	}
 }
