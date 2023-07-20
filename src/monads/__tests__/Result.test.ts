@@ -1,5 +1,6 @@
 import { describe, expect, it } from '@jest/globals'
 import { Err, Result, Ok } from '../Result'
+import match from '../../instructions/match'
 
 const CANNOT_DIVIDE = 'Cannot divide number by 0.'
 

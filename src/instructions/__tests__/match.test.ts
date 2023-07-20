@@ -18,12 +18,17 @@ function emotion2smiley(emotion: Emotion) {
 	})
 }
 
-function emotionIndex(emotion: Emotion) {
-	return match(emotion).case({
-		[Emotion.HAPPY]: (val) => `Index for happy is ${val}`,
-		[Emotion.SAD]: (val) => `Index for sad is ${val}`,
-		otherwise: () => null,
-	})
+function emotionIndex(emotion: Emotion): string | null {
+	const res = match(emotion)
+		.when.case(Emotion.HAPPY, (val) => `Index for happy is ${val}`)
+		.exhaustive()
+
+	return res
+	// return match(emotion).case({
+	// 	[Emotion.HAPPY]: (val) => `Index for happy is ${val}`,
+	// 	[Emotion.SAD]: (val) => `Index for sad is ${val}`,
+	// 	otherwise: () => null,
+	// })
 }
 
 describe('with Statement related tests', () => {
