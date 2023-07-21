@@ -2,7 +2,11 @@
 	"name": "shulk",
 	"version": "0.1.1",
 	"description": "Attempt to bring functionnal programming concepts to TypeScript",
-	"main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Grouloo/shulk"
+  },
+  "main": "lib/index.js",
 	"author": "Elliott",
 	"license": "MIT",
 	"private": false,
