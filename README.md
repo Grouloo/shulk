@@ -1,4 +1,4 @@
-# Monad-O
+# Shulk
 
 ## Description
 
@@ -27,7 +27,7 @@ When using `match`, the compiler will force you to be exhaustive, reducing chanc
 Let's take a look at a simple example:
 
 ```ts
-import { match } from 'monad-o'
+import { match } from 'shulk'
 
 type Pet = 'cat' | 'dog' | 'hamster'
 let pet: Pet = 'cat'
@@ -88,14 +88,14 @@ There is a problem though: a Television that is currently off can't display anyt
 
 We could just write a getter that throws or return null if `this.isOn == false`, but either way it's kind of awkward, as it would only be a verification at runtime.
 
-Monad-O states allows you to make invalid states like this irrepresentable in the compiler, thus making your code safer.
+Shulk states allows you to make invalid states like this irrepresentable in the compiler, thus making your code safer.
 
 #### Use states
 
-Let's rewrite our Television model with Monad-O states:
+Let's rewrite our Television model with Shulk states:
 
 ```ts
-import { state, Struct } from 'monad-o'
+import { state, Struct } from 'shulk'
 
 const Television = state<{
 	On: Struct<{ currentChannel: number }>
@@ -144,7 +144,7 @@ The Result monad is a generic type (but really a State under the hood) that will
 Let's make a function that divides 2 number and can return an error:
 
 ```ts
-import { Result, Ok, Err } from 'monad-o'
+import { Result, Ok, Err } from 'shulk'
 
 function divide(dividend: number, divisor: number): Result<Error, number> {
 	if (divisor == 0) {
