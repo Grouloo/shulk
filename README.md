@@ -6,7 +6,11 @@ An attempt to bring some functionnal programming concepts and other useful thing
 
 ## Get started
 
-Coming soon...
+```bash
+npm i shulk
+# OR
+yarn add shulk
+```
 
 ## How to use
 
