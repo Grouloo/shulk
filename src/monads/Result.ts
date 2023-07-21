@@ -1,3 +1,4 @@
+import match from '../instructions/match'
 import State from './State'
 import { Struct } from './Struct'
 
@@ -11,11 +12,27 @@ type RawResult<ErrType, OkType> = {
 	_state: 'Ok' | 'Err'
 }
 
-export type Result<ErrType, OkType> = RawResult<ErrType, OkType> & {
+interface ResultMethods<ErrType, OkType> {
+	/**
+	 * Throws ErrType if Result has an Err state
+	 * @returns
+	 */
 	unwrap: () => OkType
-	unwrapOr: <T>(otherwise: T) => OkType | T
+	/**
+	 * Throws the message if Result has an Err state
+	 * @returns
+	 */
 	expect: (message: string) => OkType
+	/**
+	 * Returns the OkType or the parameter
+	 * @param otherwise
+	 * @returns
+	 */
+	unwrapOr: <T>(otherwise: T) => OkType | T
 }
+
+export type Result<ErrType, OkType> = RawResult<ErrType, OkType> &
+	ResultMethods<ErrType, OkType>
 
 export const ResultImpl = State<{
 	Err: Struct<{ val: any }>
@@ -23,11 +40,11 @@ export const ResultImpl = State<{
 }>()
 
 function unwrap<ErrType, OkType>(result: RawResult<ErrType, OkType>): OkType {
-	return ResultImpl.match(result).case({
-		Err: () => {
-			throw result.val as ErrType
+	return match(result).case({
+		Err: (res) => {
+			throw res.val
 		},
-		Ok: () => result.val as OkType,
+		Ok: (res) => res.val,
 	})
 }
 
@@ -35,7 +52,7 @@ function unwrapOr<ErrType, OkType, T>(
 	result: RawResult<ErrType, OkType>,
 	orElse: T,
 ): OkType | T {
-	return ResultImpl.match(result).case({
+	return match(result).case({
 		Err: () => orElse,
 		Ok: () => result.val as OkType,
 	})
@@ -45,7 +62,7 @@ function expect<ErrType, OkType>(
 	result: RawResult<ErrType, OkType>,
 	message: string,
 ): OkType {
-	return ResultImpl.match(result).case({
+	return match(result).case({
 		Err: () => {
 			throw message
 		},

@@ -1,5 +1,7 @@
 import { describe, it, expect } from '@jest/globals'
 import match from '../match'
+import state from '../../monads/State'
+import { Struct } from '../../monads/Struct'
 
 enum Emotion {
 	HAPPY,
@@ -14,21 +16,21 @@ function emotion2smiley(emotion: Emotion) {
 		[Emotion.HAPPY]: ':D',
 		[Emotion.SAD]: ':(',
 		[Emotion.ANGRY]: '>:(',
-		otherwise: '???',
+		_otherwise: '???',
 	})
 }
 
 function emotionIndex(emotion: Emotion): string | null {
-	const res = match(emotion)
-		.when.case(Emotion.HAPPY, (val) => `Index for happy is ${val}`)
-		.exhaustive()
+	// const res = match(emotion)
+	// 	.when.case(Emotion.HAPPY, (val) => `Index for happy is ${val}`)
+	// 	.exhaustive()
 
-	return res
-	// return match(emotion).case({
-	// 	[Emotion.HAPPY]: (val) => `Index for happy is ${val}`,
-	// 	[Emotion.SAD]: (val) => `Index for sad is ${val}`,
-	// 	otherwise: () => null,
-	// })
+	// return res
+	return match(emotion).case({
+		[Emotion.HAPPY]: (val) => `Index for happy is ${val}`,
+		[Emotion.SAD]: (val) => `Index for sad is ${val}`,
+		_otherwise: () => null,
+	})
 }
 
 describe('with Statement related tests', () => {
@@ -60,3 +62,20 @@ describe('case Statement related tests', () => {
 		expect(emotionIndex(Emotion.SURPRISED)).toBeNull()
 	})
 })
+
+// describe('State match related tests', () => {
+//     const EmotionnalState = state<{
+//         Hopeful: Struct<{}>
+//         Despaired: Struct<{}>
+//     }>()
+
+//     function commentState(emotionnalState: {_state: string}){
+//         match(emotionnalState).case({
+
+//         })
+//     }
+
+//     it('should', () => {
+
+//     })
+// })

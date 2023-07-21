@@ -1,4 +1,4 @@
-import match, { MatchStatement } from '../instructions/match'
+import match from '../instructions/match'
 import struct, { Struct } from './Struct'
 
 type State = {
@@ -12,7 +12,7 @@ type StateRes<T extends State> = {
 type StructInstance<StateKey> = { _state: StateKey }
 
 export default function state<T extends State>(): StateRes<T> & {
-	match: (obj: StructInstance<keyof T>) => MatchStatement<keyof T>
+	//match: (obj: StructInstance<keyof T>) => MatchStatement<keyof T>
 } {
 	return new Proxy(
 		{},
@@ -23,18 +23,18 @@ export default function state<T extends State>(): StateRes<T> & {
 				prop: keyof T,
 				_receiver, //: //| ((obj: StructInstance<keyof T>) => MatchStatement<keyof T>) //| ((obj: T[typeof prop]) => T[typeof prop] & { _state: string }) {
 			) {
-				if (prop == 'match') {
-					return (obj: StructInstance<keyof T>) => matchState(obj)
-				}
+				// if (prop == 'match') {
+				// 	return (obj: StructInstance<keyof T>) => matchState(obj)
+				// }
 
 				return (obj: T[typeof prop]) => ({ ...obj, _state: prop })
 			},
 		},
 	) as StateRes<T> & {
-		match: (obj: StructInstance<keyof T>) => MatchStatement<keyof T>
+		//match: (obj: StructInstance<keyof T>) => MatchStatement<keyof T>
 	}
 }
 
-function matchState<T>(obj: StructInstance<keyof T>) {
-	return match(obj._state)
-}
+// function matchState<T>(obj: StructInstance<keyof T>) {
+// 	return match(obj)
+// }
