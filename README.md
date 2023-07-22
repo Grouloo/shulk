@@ -193,6 +193,7 @@ match(divide(2, 2)).case({
 ## To do
 
 -  State match typing
+-  Tuple matching
 -  Custom methods for Struct
 -  Macro?
 -  Pipe operator?

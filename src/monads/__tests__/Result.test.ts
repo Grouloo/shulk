@@ -61,3 +61,26 @@ describe('expect tests', () => {
 		expect(() => FAILED.expect(EXPECTED)).toThrowError(EXPECTED)
 	})
 })
+
+describe('match tests', () => {
+	const HANDLED_ERR = 'handled err path'
+
+	function matchDivision(res: Result<Error, number>) {
+		return match(res).case({
+			Err: () => HANDLED_ERR,
+			Ok: ({ val }) => val,
+		})
+	}
+
+	it('it should handle Ok path', () => {
+		const msg = matchDivision(SUCCESS)
+
+		expect(msg).toBe(SUCCESS.val)
+	})
+
+	it('it should handle Err path', () => {
+		const msg = matchDivision(FAILED)
+
+		expect(msg).toBe(HANDLED_ERR)
+	})
+})

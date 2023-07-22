@@ -7,10 +7,12 @@ const INVALID_WRAPPED_VALUE = 'Invalid wrapped value'
 // type Failure<ErrType> = { val: ErrType }
 // type Success<OkType> = { val: OkType }
 
-type RawResult<ErrType, OkType> = {
-	val: ErrType | OkType
-	_state: 'Ok' | 'Err'
-}
+type RawResult<ErrType, OkType> =
+	| {
+			val: ErrType
+			_state: 'Err'
+	  }
+	| { val: OkType; _state: 'Ok' }
 
 interface ResultMethods<ErrType, OkType> {
 	/**
