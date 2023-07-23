@@ -1,3 +1,5 @@
+import { Handler, Lookup, LookupFn } from './types'
+
 export class MatchValExpression<T extends string | number> {
 	constructor(protected input: T) {}
 

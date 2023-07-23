@@ -1,4 +1,4 @@
-type Lookup<T extends string | number, Output> =
+export type Lookup<T extends string | number, Output> =
 	| {
 			[x in T]: Output
 	  }
@@ -8,9 +8,9 @@ type Lookup<T extends string | number, Output> =
 			_otherwise: Output
 	  })
 
-type Handler<T, Output = unknown> = (val: T) => Output
+export type Handler<T, Output = unknown> = (val: T) => Output
 
-type LookupFn<T extends string | number, Output> =
+export type LookupFn<T extends string | number, Output> =
 	| {
 			[x in T]: Handler<x, Output>
 	  }

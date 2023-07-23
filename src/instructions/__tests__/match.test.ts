@@ -1,7 +1,5 @@
 import { describe, it, expect } from '@jest/globals'
 import match from '../match'
-import state from '../../monads/State'
-import { Struct } from '../../monads/Struct'
 
 enum Emotion {
 	HAPPY,
