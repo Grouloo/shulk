@@ -166,7 +166,7 @@ divide(2, 0).unwrap() // Uncaught Error: Cannot divide by 0!
 // expect() throws a custom message when it encounters an error state
 // Like unwrap(), you shoudn't use it in a production context
 divide(2, 2).expect('Too bad!') // 1
-divide(2, 0).unwrap('Too bad!') // Uncaught Too bad!
+divide(2, 0).expect('Too bad!') // Uncaught Too bad!
 
 // unwrapOr() will return the provided default value when encountering an error state
 // It is safe to use in a production context, as the program cannot crash
@@ -190,10 +190,62 @@ match(divide(2, 2)).case({
 })
 ```
 
+### Optionnal value handling
+
+#### Why: the Billion Dollar Mistake
+
+Of all languages, TypeScript is far from being the one with the worst `null` implementation.
+
+You will never get a `NullPointerException`, but it won't always make your code safer, as you're not forced to handle it explicitely in some situations.
+
+#### Use the Maybe monad
+
+The Maybe monad is a generic type (and a State under the hood) which can has 2 states: Some (with a value attached), and None (with no value attached).
+
+Let's take our `divide` function from the previous sanction, but this time we will return no value when confronted to a division by 0:
+
+```ts
+import { Maybe, Some, None } from 'shulk'
+
+function divide(dividend: number, divisor: number): Maybe<umber> {
+	if (divisor == 0) {
+		return None()
+	}
+	return Some(dividend / divisor)
+}
+
+// We can then handle our Result in a few different ways
+
+// unwrap() is unsafe as it will throw if confronted to the None state, but can be useful for prototyping
+divide(2, 2).unwrap() // 1
+divide(2, 0).unwrap() // Uncaught Error: Maybe is None
+
+// expect() throws a custom message when it encounters an error state
+// Like unwrap(), you shoudn't use it in a production context
+divide(2, 2).expect('Too bad!') // 1
+divide(2, 0).expect('Too bad!') // Uncaught Too bad!
+
+// unwrapOr() will return the provided default value when encountering a None state
+// It is safe to use in a production context, as the program cannot crash
+divide(2, 2).unwrapOr('Not a number') // 1
+divide(2, 0).unwrapOr('Not a number') // "Not a number"
+```
+
+#### Maybe and pattern matching
+
+Maybe is a State, which means you can handle it with `match`.
+
+```ts
+match(divide(2, 2)).case({
+	None: () => console.log('Could not compute result'),
+	Some: ({ val }) => console.log('Result is ', val),
+})
+```
+
 ## To do
 
--  State match typing
--  Tuple matching
+-  Single value states
+-  Tuple matching?
 -  Custom methods for Struct
 -  Macro?
 -  Pipe operator?
