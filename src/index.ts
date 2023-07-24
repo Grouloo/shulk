@@ -12,9 +12,8 @@ export { Maybe, Some, None }
 import { Tuple, tuple } from './monads/Tuple'
 export { Tuple, tuple }
 
-import state from './monads/State'
-import { Struct } from './monads/Struct'
-export { state, Struct }
+import { state } from './monads/State'
+export { state }
 
 import isObject from './typecheck/isObject'
 import isState from './typecheck/isState'

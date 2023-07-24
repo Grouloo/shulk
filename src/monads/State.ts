@@ -1,40 +1,26 @@
-import match from '../instructions/match'
-import struct, { Struct } from './Struct'
-
 type State = {
-	[x: string]: Struct<any>
+	[x: string]: any
 }
 
 type StateRes<T extends State> = {
-	[x in keyof T]: Struct<ReturnType<T[x]>, { _state: x }>
+	[x in keyof T]: (
+		val: T[x],
+	) => T[x] extends object ? T[x] & { _state: x } : { val: T[x]; _state: x }
 }
 
-type StructInstance<StateKey> = { _state: StateKey }
-
-export default function state<T extends State>(): StateRes<T> & {
-	//match: (obj: StructInstance<keyof T>) => MatchStatement<keyof T>
-} {
+export function state<T extends State>(): StateRes<T> {
 	return new Proxy(
 		{},
 		{
 			//@ts-ignore
-			get(
-				_target,
-				prop: keyof T,
-				_receiver, //: //| ((obj: StructInstance<keyof T>) => MatchStatement<keyof T>) //| ((obj: T[typeof prop]) => T[typeof prop] & { _state: string }) {
-			) {
-				// if (prop == 'match') {
-				// 	return (obj: StructInstance<keyof T>) => matchState(obj)
-				// }
-
-				return (obj: T[typeof prop]) => ({ ...obj, _state: prop })
+			get(_target, prop: keyof T, _receiver) {
+				return (obj: T[typeof prop]) => {
+					if (typeof obj === 'object') {
+						return { ...obj, _state: prop }
+					}
+					return { val: obj, _state: prop }
+				}
 			},
 		},
-	) as StateRes<T> & {
-		//match: (obj: StructInstance<keyof T>) => MatchStatement<keyof T>
-	}
+	) as StateRes<T>
 }
-
-// function matchState<T>(obj: StructInstance<keyof T>) {
-// 	return match(obj)
-// }

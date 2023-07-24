@@ -1,11 +1,10 @@
-import state from '../monads/State'
-import { Struct } from '../monads/Struct'
+import { state } from '../monads/State'
 
 type Unmatched = { _state: 'Unmatched' }
 type Matched<T> = { val: T; _state: 'Matched' }
 const MatchState = state<{
-	Unmatched: Struct<{}>
-	Matched: Struct<{ val: unknown }>
+	Unmatched: {}
+	Matched: { val: unknown }
 }>()
 
 class CaseStatement<In, Out = null> {

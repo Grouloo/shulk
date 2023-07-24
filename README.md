@@ -99,11 +99,11 @@ Shulk states allows you to make invalid states like this irrepresentable in the 
 Let's rewrite our Television model with Shulk states:
 
 ```ts
-import { state, Struct } from 'shulk'
+import { state } from 'shulk'
 
 const Television = state<{
-	On: Struct<{ currentChannel: number }>
-	Off: Struct<{}>
+	On: { currentChannel: number }
+	Off: {}
 }>()
 ```
 
@@ -143,7 +143,7 @@ Moreover, in some languages such as TypeScript, we can't even declare what kind 
 
 #### Use the Result monad
 
-The Result monad is a generic type (but really a State under the hood) that will and force you to handle errors by wrapping your return types .
+The Result monad is a generic type (but really a State under the hood) that will force you to handle errors by wrapping your return types .
 
 Let's make a function that divides 2 number and can return an error:
 
@@ -207,7 +207,7 @@ Let's take our `divide` function from the previous sanction, but this time we wi
 ```ts
 import { Maybe, Some, None } from 'shulk'
 
-function divide(dividend: number, divisor: number): Maybe<umber> {
+function divide(dividend: number, divisor: number): Maybe<number> {
 	if (divisor == 0) {
 		return None()
 	}
@@ -242,10 +242,53 @@ match(divide(2, 2)).case({
 })
 ```
 
+### Handle loading
+
+#### Use the Loading monad
+
+The Loading monad has 3 states: Pending, Failed, Done.
+
+Let's use the Loading monad in a Svelte JS application:
+
+```svelte
+<script lang="ts">
+    import { Loading } from 'shulk'
+
+    let loading: Loading<Error, string> = Pending()
+
+    doSomething().then((val) => {
+        loading = Done(val)
+    })
+    .catch(e => {
+        loading = Failed(e)
+    })
+</script>
+
+{#if loading._state == 'Loading'}
+    <Loader />
+{:else if loading._state == 'Done'}
+    <p>{loading.val}</p>
+{:else}
+    <p color="red">{loading.val}</p>
+{/if}
+```
+
+#### Loading and pattern matching
+
+Loading is a State, which means you can handle it with `match`.
+
+```ts
+match(loading).case({
+	Pending: () => console.log('Now loading....'),
+	Done: ({ val }) => console.log('Result is ', val),
+	Failed: ({ val }) => {
+		throw val
+	},
+})
+```
+
 ## To do
 
--  Single value states
--  Tuple matching?
--  Custom methods for Struct
+-  Custom methods for states (using macros?)
 -  Macro?
 -  Pipe operator?

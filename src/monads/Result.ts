@@ -1,11 +1,7 @@
 import match from '../instructions/match'
-import State from './State'
-import { Struct } from './Struct'
+import { state } from './State'
 
 const INVALID_WRAPPED_VALUE = 'Invalid wrapped value'
-
-// type Failure<ErrType> = { val: ErrType }
-// type Success<OkType> = { val: OkType }
 
 type RawResult<ErrType, OkType> =
 	| {
@@ -36,12 +32,13 @@ interface ResultMethods<ErrType, OkType> {
 export type Result<ErrType, OkType> = RawResult<ErrType, OkType> &
 	ResultMethods<ErrType, OkType>
 
-export const ResultImpl = State<{
-	Err: Struct<{ val: any }>
-	Ok: Struct<{ val: any }>
+export const ResultImpl = state<{
+	Err: { val: any }
+	Ok: { val: any }
 }>()
 
 function unwrap<ErrType, OkType>(result: RawResult<ErrType, OkType>): OkType {
+	console.log(result)
 	return match(result).case({
 		Err: (res) => {
 			throw res.val

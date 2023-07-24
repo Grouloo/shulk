@@ -1,11 +1,9 @@
 import { expect, it, describe } from '@jest/globals'
-import state from '../State'
-import match from '../../instructions/match'
-import { Struct } from '../Struct'
+import { state } from '../State'
 
 const Television = state<{
-	On: Struct<{ currentChannel: number }>
-	Off: Struct<{}>
+	On: { currentChannel: number }
+	Off: {}
 }>()
 
 function tvFactory(isOn: boolean) {
@@ -15,8 +13,6 @@ function tvFactory(isOn: boolean) {
 
 	return Television.Off({})
 }
-
-const myTv = tvFactory(true)
 
 describe('Instantiation tests', () => {
 	it('should instantiate a Television with On Struct', () => {
@@ -30,5 +26,19 @@ describe('Instantiation tests', () => {
 		const tv = Television.Off({})
 
 		expect(tv._state).toBe('Off')
+	})
+})
+
+describe('Single value states', () => {
+	const Billboard = state<{
+		Off: void
+		On: string
+	}>()
+
+	it('should instantiate On state', () => {
+		const coca = Billboard.On('Coca-cola')
+
+		expect(coca.val).toBe('Coca-cola')
+		expect(coca._state).toBe('On')
 	})
 })

@@ -1,5 +1,4 @@
-import state from './State'
-import { Struct } from './Struct'
+import { state } from './State'
 
 type MaybeMethods<T> = {
 	/**
@@ -25,8 +24,8 @@ export type RawMaybe<T> = { val: T; _state: 'Some' } | { _state: 'None' }
 export type Maybe<T = any> = RawMaybe<T> & MaybeMethods<T>
 
 const MaybeImpl = state<{
-	None: Struct<{}>
-	Some: Struct<{ val: any }>
+	None: {}
+	Some: { val: any }
 }>()
 
 function unwrap<T>(maybe: RawMaybe<T>): T {
