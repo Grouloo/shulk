@@ -38,7 +38,6 @@ export const ResultImpl = state<{
 }>()
 
 function unwrap<ErrType, OkType>(result: RawResult<ErrType, OkType>): OkType {
-	console.log(result)
 	return match(result).case({
 		Err: (res) => {
 			throw res.val
