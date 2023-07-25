@@ -9,6 +9,9 @@ export { Result, Ok, Err }
 import { Maybe, Some, None } from './monads/Maybe'
 export { Maybe, Some, None }
 
+import { Loading, Pending, Failed, Done } from './monads/Loading'
+export { Loading, Pending, Failed, Done }
+
 import { Tuple, tuple } from './monads/Tuple'
 export { Tuple, tuple }
 
