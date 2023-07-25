@@ -15,8 +15,11 @@ export { Loading, Pending, Failed, Done }
 import { Tuple, tuple } from './monads/Tuple'
 export { Tuple, tuple }
 
-import { state } from './monads/State'
-export { state }
+import { state, State } from './monads/State'
+export { state, State }
+
+import { $defMacro } from './instructions/defMacro'
+export { $defMacro }
 
 import isObject from './typecheck/isObject'
 import isState from './typecheck/isState'

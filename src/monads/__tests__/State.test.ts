@@ -1,10 +1,11 @@
 import { expect, it, describe } from '@jest/globals'
-import { state } from '../State'
+import { State, state } from '../State'
 
 const Television = state<{
 	On: { currentChannel: number }
 	Off: {}
 }>()
+type Television = State<typeof Television>
 
 function tvFactory(isOn: boolean) {
 	if (isOn) {

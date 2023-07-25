@@ -287,6 +287,55 @@ match(loading).case({
 })
 ```
 
+### Metaprogramming
+
+#### Why: too much boilerplate
+
+In our modern codebases, boilerplate is everywhere. They are full of repetitive useless code.
+
+There is an answer to this pain, though : meta-programming, or the ability for a program to treat code as data.
+
+TypeScript doesn't have strong metaprogramming features like Rust or LisP do, but it gives us nice patterns and a powerful compiler which are enough to do some nice things.
+
+#### Define macros
+
+Using OOP, implementing the Repository pattern can be a pain, as it forces us to write a lot of boilerplate code.
+
+With Shulk, you can define your own dynamic objects using the function `$defMacro`.
+
+Let's implement the repository pattern using a macro:
+
+```ts
+import { $defMacro } from 'shulk'
+
+// Our macro declaration
+const $repository =
+	<T>(table: string) =>
+	(database: Adapter) =>
+		$defMacro({
+			props: { table, database },
+			methods: {
+				create: (self, obj: T): T => database.put(self.table, obj),
+				read: (self, id: number): T => database.get(self.table, id),
+				update: (self, id: number, obj: T): T =>
+					database.put(self.table, id, obj),
+				delete: (self, id: number): void => database.del(table, id),
+			},
+		})
+
+type User = { id?: number; name: string; email: string }
+
+// Let's create a repository for our User model
+const UserRepository = $repository<User>('users')
+
+// Now, we can instantiate our UserRepository, with an unspecified database adapter
+const instance = UserRepository(myDatabase)
+
+instance.create({ name: 'John Doe', email: 'john@ac.me' })
+
+console.log(instance.read(1)) // > {id: 1, name: "John Doe", email: "john@ac.me"}
+```
+
 ## To do
 
 -  Custom methods for states (using macros?)

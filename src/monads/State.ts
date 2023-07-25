@@ -1,14 +1,16 @@
-type State = {
+type States = {
 	[x: string]: any
 }
 
-type StateRes<T extends State> = {
+type StatesRes<T extends States> = {
 	[x in keyof T]: (
 		val: T[x],
 	) => T[x] extends object ? T[x] & { _state: x } : { val: T[x]; _state: x }
 }
 
-export function state<T extends State>(): StateRes<T> {
+export type State<T extends StatesRes<States>> = ReturnType<T[keyof T]>
+
+export function state<T extends States>(): StatesRes<T> {
 	return new Proxy(
 		{},
 		{
@@ -22,5 +24,5 @@ export function state<T extends State>(): StateRes<T> {
 				}
 			},
 		},
-	) as StateRes<T>
+	) as StatesRes<T>
 }
