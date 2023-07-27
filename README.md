@@ -75,7 +75,7 @@ function makeSound(pet: Pet) {
 console.log(makeSound('cat')) // > "cat: meow"
 ```
 
-### State
+### Polymorphism and state machines
 
 #### Why: OOP has a problem
 
@@ -297,13 +297,13 @@ There is an answer to this pain, though : meta-programming, or the ability for a
 
 TypeScript doesn't have strong metaprogramming features like Rust or LisP do, but it gives us nice patterns and a powerful compiler which are enough to do some nice things.
 
-#### Define macros
+#### Use definition macros
 
 Using OOP, implementing the Repository pattern can be a pain, as it forces us to write a lot of boilerplate code.
 
 With Shulk, you can define your own dynamic objects using the function `$defMacro`.
 
-Let's implement the repository pattern using a macro:
+Let's implement the repository pattern using a definition macro:
 
 ```ts
 import { $defMacro } from 'shulk'
@@ -340,4 +340,3 @@ console.log(instance.read(1)) // > {id: 1, name: "John Doe", email: "john@ac.me"
 
 -  Custom methods for states (using macros?)
 -  Macro?
--  Pipe operator?
