@@ -16,7 +16,7 @@ type MaybeMethods<T> = {
 	 * @param otherwise
 	 * @returns
 	 */
-	unwrapOr: (otherwise: unknown) => T | typeof otherwise
+	unwrapOr: <O>(otherwise: O) => T | O
 }
 
 export type RawMaybe<T> = { val: T; _state: 'Some' } | { _state: 'None' }
@@ -42,10 +42,7 @@ function expect<T>(maybe: RawMaybe<T>, message: string) {
 	throw message
 }
 
-function unwrapOr<T>(
-	maybe: RawMaybe<T>,
-	otherwise: unknown,
-): T | typeof otherwise {
+function unwrapOr<T, O>(maybe: RawMaybe<T>, otherwise: O): T | O {
 	if (maybe._state == 'Some') {
 		return maybe.val
 	}
@@ -59,7 +56,8 @@ export function None(): Maybe {
 		...impl,
 		unwrap: () => unwrap(impl),
 		expect: (message: string) => expect(impl, message),
-		unwrapOr: (otherwise: unknown) => unwrapOr(impl, otherwise),
+		unwrapOr: <O>(otherwise: O) =>
+			unwrapOr<TemplateStringsArray, O>(impl, otherwise),
 	}
 }
 
@@ -70,6 +68,6 @@ export function Some<T>(val: T) {
 		...impl,
 		unwrap: () => unwrap(impl),
 		expect: (message: string) => expect(impl, message),
-		unwrapOr: (otherwise: unknown) => unwrapOr(impl, otherwise),
+		unwrapOr: <O>(otherwise: O) => unwrapOr<T, O>(impl, otherwise),
 	}
 }
