@@ -252,16 +252,18 @@ Let's use the Loading monad in a Svelte JS application:
 
 ```svelte
 <script lang="ts">
-    import { Loading } from 'shulk'
+    import { Loading, Result, Pending, Failed, Done } from 'shulk'
 
     let loading: Loading<Error, string> = Pending()
 
-    doSomething().then((val) => {
-        loading = Done(val)
-    })
-    .catch(e => {
-        loading = Failed(e)
-    })
+	function OnMount() {
+		const res: Result<Error, string> = await doSomething()
+
+		loading = match(res).case({
+			Err: ({ val }) => Failed(val),
+			Ok: ({ val }) => Done(val)
+		})
+	}
 </script>
 
 {#if loading._state == 'Loading'}
