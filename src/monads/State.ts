@@ -3,9 +3,11 @@ type States = {
 }
 
 type StatesRes<T extends States> = {
-	[x in keyof T]: (
+	readonly [x in keyof T]: (
 		val: T[x],
-	) => T[x] extends object ? T[x] & { _state: x } : { val: T[x]; _state: x }
+	) => T[x] extends object
+		? Readonly<T[x] & { _state: x }>
+		: Readonly<{ val: T[x]; _state: x }>
 }
 
 export type State<T extends StatesRes<States>> = ReturnType<T[keyof T]>
