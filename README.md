@@ -1,8 +1,10 @@
 # Shulk
 
+Write beautiful code that won't crash.
+
 ## Description
 
-An attempt to bring some functionnal programming concepts and other useful things for execution safety to TypeScript.
+Shulk enhances your TypeScript code by providing a typesafe `match` expression, monads, and a better way to handle states and polymorphism.
 
 ## Get started
 
@@ -18,7 +20,7 @@ yarn add shulk
 
 #### Why: Every execution path should be handled
 
-In addition to be syntactically disgraceful, TypeScript `switch/case` statements are not safe, as the TypeScript compiler will not let you know that you forgot to handle some execution paths.
+In addition to being syntactically disgraceful, TypeScript `switch/case` statements are not safe, as the TypeScript compiler will not let you know that you forgot to handle some execution paths.
 
 This can cause errors, or even mistakes in your business logic.
 

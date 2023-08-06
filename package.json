@@ -6,6 +6,17 @@
 		"type": "git",
 		"url": "https://github.com/Grouloo/shulk"
 	},
+	"keywords": [
+		"monad",
+		"monads",
+		"match",
+		"Result",
+		"Maybe",
+		"Loading",
+		"State machine",
+		"polymorphism",
+		"rust-like enums"
+	],
 	"main": "lib/index.js",
 	"author": "Elliott",
 	"license": "MIT",
