@@ -2,7 +2,8 @@
 	"compilerOptions": {
 		/* Visit https://aka.ms/tsconfig to read more about this file */
 		/* Language and Environment */
-		"target": "esnext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+		"target": "ES2021" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+		"lib": ["ES2021"],
 		/* Modules */
 		"module": "CommonJS" /* Specify what module code is generated. */,
 		"moduleResolution": "node",
