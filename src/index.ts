@@ -18,6 +18,9 @@ export { Tuple, tuple }
 import { state, State } from './monads/State'
 export { state, State }
 
+import { resultify } from './wrappers/resultify'
+export { resultify }
+
 import { $defMacro } from './instructions/defMacro'
 export { $defMacro }
 

@@ -1,16 +1,4 @@
 import match from '../instructions/match'
-import { state } from './State'
-
-const INVALID_WRAPPED_VALUE = 'Invalid wrapped value'
-
-type RawResult<ErrType, OkType> =
-	| {
-			val: ErrType
-			_state: 'Err'
-	  }
-	| { val: OkType; _state: 'Ok' }
-
-interface ResultMethods<ErrType, OkType> {}
 
 export class Result<ErrType, OkType> {
 	private constructor(
@@ -24,6 +12,24 @@ export class Result<ErrType, OkType> {
 
 	static Ok<OkType>(val: OkType) {
 		return new this<never, OkType>(val, 'Ok')
+	}
+
+	/**
+	 * Returns true if Result has an Ok state
+	 * When true, the TS compiler will know val has an OkType
+	 * @returns
+	 */
+	isOk(): this is Result<never, OkType> {
+		return this._state === 'Ok'
+	}
+
+	/**
+	 * Returns true if Result has an Err state
+	 * When true, the TS compiler will know val has an Errtype
+	 * @returns
+	 */
+	isErr(): this is Result<ErrType, never> {
+		return this._state === 'Err'
 	}
 
 	/**

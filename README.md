@@ -145,16 +145,20 @@ Moreover, in some languages such as TypeScript, we can't even declare what kind 
 
 #### Use the Result monad
 
-The Result monad is a generic type (but really a State under the hood) that will force you to handle errors by wrapping your return types .
+The Result monad is a generic type (but really a State under the hood) that will force you to handle errors by wrapping your return types.
+
+```ts
+type Result<ErrType, OkType>
+```
 
 Let's make a function that divides 2 number and can return an error:
 
 ```ts
 import { Result, Ok, Err } from 'shulk'
 
-function divide(dividend: number, divisor: number): Result<Error, number> {
+function divide(dividend: number, divisor: number): Result<string, number> {
 	if (divisor == 0) {
-		return Err(Error('Cannot divide by 0!'))
+		return Err('Cannot divide by 0!')
 	}
 	return Ok(dividend / divisor)
 }
@@ -163,7 +167,7 @@ function divide(dividend: number, divisor: number): Result<Error, number> {
 
 // unwrap() is unsafe as it will throw the Error state, but can be useful for prototyping
 divide(2, 2).unwrap() // 1
-divide(2, 0).unwrap() // Uncaught Error: Cannot divide by 0!
+divide(2, 0).unwrap() // Uncaught Cannot divide by 0!
 
 // expect() throws a custom message when it encounters an error state
 // Like unwrap(), you shoudn't use it in a production context
@@ -175,10 +179,20 @@ divide(2, 0).expect('Too bad!') // Uncaught Too bad!
 divide(2, 2).unwrapOr('Not a number') // 1
 divide(2, 0).unwrapOr('Not a number') // "Not a number"
 
+// isOk() will return true if the Result has an Ok state
+// When true, the compiler will infer that val has an OkType
+divide(2, 2).isOk() // true
+divide(2, 0).isOk() // false
+
+// isErr() will return true if the Result has an Err state
+// When true, the compiler will infer that val has an ErrType
+divide(2, 2).isErr() // false
+divide(2, 0).isErr() // true
+
 // The val property contains the value returned by the function
 // It is safe to use
 divide(2, 2).val // 1
-divide(2, 0).val // Error: Cannot divide by 0!
+divide(2, 0).val // "Cannot divide by 0!"
 ```
 
 #### Result and pattern matching
@@ -192,7 +206,7 @@ match(divide(2, 2)).case({
 })
 ```
 
-### Optionnal value handling
+### Optional value handling
 
 #### Why: the Billion Dollar Mistake
 
@@ -289,6 +303,35 @@ match(loading).case({
 		throw val
 	},
 })
+```
+
+### Wrappers
+
+Shulk helps you make your code safer by providing useful tools and structures, but you'll probably have to use unsafe third-party libraries or legacy code at some point.
+
+To help you keep your code safe, Shulk provides wrappers that enable you to transform unsafe functions outputs into safe monads.
+
+#### resultify
+
+The `resultify` wrapper takes an unsafe function and return its output in a `Result`.
+
+You have probably used the `JSON.stringify()` method in your code before, but did you know that it will throw a `TypeError` if it encounters a `BigInt`? Probably not, and you won't learn it from its signature.
+
+It is one of the rare functions of the JS standard library that atually throws an error instead of returning a `null` or an incorrect value. It is an improvement, but for us who want to build stable and reliable applications, it is not enough.
+
+Let's make `JSON.stringify()` way safer by using Shulk's `resultify` wrapper:
+
+```ts
+import { resultify } from 'shulk'
+
+// With a single line of code, our application becomes much safer
+const safeJsonStringify = resultify<TypeError, typeof JSON.stringify>(
+	JSON.stringify,
+)
+
+// Now the one calling the function knows it can return a string,
+// or a TypeError if it fails
+const result: Result<TypeError, string> = safeJsonStringify({ foo: BigInt(1) })
 ```
 
 ### Metaprogramming
