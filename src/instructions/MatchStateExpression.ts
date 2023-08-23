@@ -39,10 +39,10 @@ export class MatchStateExpression<T extends stateobj> {
 
 type LookupStateFn<T extends stateobj, Output> =
 	| {
-			[x in T['_state']]: Handler<T>
+			[x in T['_state']]: Handler<T, Output>
 	  }
 	| ({
-			[x in T['_state']]?: Handler<T>
+			[x in T['_state']]?: Handler<T, Output>
 	  } & {
-			_otherwise: Handler<T>
+			_otherwise: Handler<T, Output>
 	  })

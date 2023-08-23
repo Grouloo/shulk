@@ -3,7 +3,17 @@ import { Handler, Lookup, LookupFn } from './types'
 export class MatchValExpression<T extends string | number> {
 	constructor(protected input: T) {}
 
-	with<Output>(lookup: Lookup<T, Output>): Output {
+	with<Output>(
+		lookup:
+			| {
+					[x in T]: Output
+			  }
+			| ({
+					[x in T]?: Output
+			  } & {
+					_otherwise: Output
+			  }),
+	): Output {
 		if (this.input in lookup) {
 			return lookup[this.input] as Output
 		}
@@ -15,7 +25,7 @@ export class MatchValExpression<T extends string | number> {
 		throw Error('Value did not match with anything.')
 	}
 
-	case<Output>(lookup: LookupFn<typeof this.input, unknown>): Output {
+	case<Output>(lookup: LookupFn<typeof this.input, Output>): Output {
 		if (this.input in lookup && typeof lookup[this.input] == 'function') {
 			return (lookup[this.input] as Handler<T>)(this.input) as Output
 		}

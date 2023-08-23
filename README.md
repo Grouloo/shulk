@@ -339,8 +339,3 @@ instance.create({ name: 'John Doe', email: 'john@ac.me' })
 
 console.log(instance.read(1)) // > {id: 1, name: "John Doe", email: "john@ac.me"}
 ```
-
-## To do
-
--  Custom methods for states (using macros?)
--  Macro?

@@ -10,82 +10,63 @@ type RawResult<ErrType, OkType> =
 	  }
 	| { val: OkType; _state: 'Ok' }
 
-interface ResultMethods<ErrType, OkType> {
+interface ResultMethods<ErrType, OkType> {}
+
+export class Result<ErrType, OkType> {
+	private constructor(
+		public val: ErrType | OkType,
+		public _state: 'Ok' | 'Err',
+	) {}
+
+	static Err<ErrType>(val: ErrType) {
+		return new this<ErrType, never>(val, 'Err')
+	}
+
+	static Ok<OkType>(val: OkType) {
+		return new this<never, OkType>(val, 'Ok')
+	}
+
 	/**
 	 * Throws ErrType if Result has an Err state
 	 * @returns
 	 */
-	unwrap: () => OkType
+	unwrap(): OkType {
+		return match(this).case({
+			Err: (res) => {
+				throw res.val
+			},
+			Ok: (res) => res.val,
+		})
+	}
 	/**
 	 * Throws the message if Result has an Err state
 	 * @returns
 	 */
-	expect: (message: string) => OkType
+	expect(message: string): OkType {
+		return match(this).case({
+			Err: () => {
+				throw message
+			},
+			Ok: () => this.val as OkType,
+		})
+	}
 	/**
 	 * Returns the OkType or the parameter
 	 * @param otherwise
 	 * @returns
 	 */
-	unwrapOr: <T>(otherwise: T) => OkType | T
-}
-
-export type Result<ErrType, OkType> = RawResult<ErrType, OkType> &
-	ResultMethods<ErrType, OkType>
-
-export const ResultImpl = state<{
-	Err: { val: any }
-	Ok: { val: any }
-}>()
-
-function unwrap<ErrType, OkType>(result: RawResult<ErrType, OkType>): OkType {
-	return match(result).case({
-		Err: (res) => {
-			throw res.val
-		},
-		Ok: (res) => res.val,
-	})
-}
-
-function unwrapOr<ErrType, OkType, T>(
-	result: RawResult<ErrType, OkType>,
-	orElse: T,
-): OkType | T {
-	return match(result).case({
-		Err: () => orElse,
-		Ok: () => result.val as OkType,
-	})
-}
-
-function expect<ErrType, OkType>(
-	result: RawResult<ErrType, OkType>,
-	message: string,
-): OkType {
-	return match(result).case({
-		Err: () => {
-			throw message
-		},
-		Ok: () => result.val as OkType,
-	})
+	unwrapOr<T>(otherwise: T): OkType | T {
+		return match(this).case({
+			Err: () => otherwise,
+			Ok: ({ val }) => val,
+		})
+	}
 }
 
 export const Err = <ErrType>(err: ErrType): Result<ErrType, never> => {
-	const impl = ResultImpl.Err({ val: err })
-
-	return {
-		...impl,
-		unwrap: () => unwrap<ErrType, never>(impl),
-		unwrapOr: (otherwise) => unwrapOr(impl, otherwise),
-		expect: (message) => expect<ErrType, never>(impl, message),
-	}
+	return Result.Err(err)
 }
 
 export const Ok = <OkType>(val: OkType): Result<never, OkType> => {
-	const impl = ResultImpl.Ok({ val })
-
-	return {
-		...impl,
-		unwrap: () => unwrap<never, OkType>(impl),
-		unwrapOr: (otherwise) => unwrapOr(impl, otherwise),
-		expect: (message) => expect<never, OkType>(impl, message),
-	}
+	return Result.Ok(val)
 }
