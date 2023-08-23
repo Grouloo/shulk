@@ -62,6 +62,39 @@ describe('expect tests', () => {
 	})
 })
 
+describe('isOK tests', () => {
+	it('should return true', () => {
+		expect(SUCCESS.isOk()).toBe(true)
+	})
+
+	it('should return false', () => {
+		expect(FAILED.isOk()).toBe(false)
+	})
+})
+
+describe('isErr tests', () => {
+	it('should return false', () => {
+		expect(SUCCESS.isErr()).toBe(false)
+	})
+
+	it('should return true', () => {
+		expect(FAILED.isErr()).toBe(true)
+	})
+})
+
+describe('toMaybe tests', () => {
+	it('should translate to a Some Maybe', () => {
+		const maybe = SUCCESS.toMaybe()
+
+		expect(maybe._state).toBe('Some')
+		expect(maybe.unwrap()).toBe(1)
+	})
+
+	it('should translate to a None Maybe', () => {
+		expect(FAILED.toMaybe()).toHaveProperty('_state', 'None')
+	})
+})
+
 describe('match tests', () => {
 	const HANDLED_ERR = 'handled err path'
 

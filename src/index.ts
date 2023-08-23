@@ -3,8 +3,8 @@ import match from './instructions/match'
 
 export { match }
 
-import { Result, Ok, Err } from './monads/Result'
-export { Result, Ok, Err }
+import { Result, Ok, Err, AsyncResult } from './monads/Result'
+export { Result, Ok, Err, AsyncResult }
 
 import { Maybe, Some, None } from './monads/Maybe'
 export { Maybe, Some, None }
