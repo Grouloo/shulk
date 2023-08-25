@@ -21,6 +21,9 @@ export { state, State }
 import { resultify } from './wrappers/resultify'
 export { resultify }
 
+import { maybify } from './wrappers/maybify'
+export { maybify }
+
 import { $defMacro } from './instructions/defMacro'
 export { $defMacro }
 
