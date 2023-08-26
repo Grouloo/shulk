@@ -15,15 +15,15 @@ export class MatchValExpression<T extends string | number> {
 		throw Error('Value did not match with anything.')
 	}
 
-	case<Output>(lookup: LookupFn<T, Output>): Output {
+	case<Output>(lookup: LookupFn<T, unknown>): Output {
 		const fn = lookup[this.input]
 
 		if (this.input in lookup && typeof fn == 'function') {
-			return fn(this.input as never)
+			return fn(this.input as never) as Output
 		}
 
 		if ('_otherwise' in lookup) {
-			return lookup._otherwise(this.input)
+			return lookup._otherwise(this.input) as Output
 		}
 
 		throw Error('Value did not match with anything.')
