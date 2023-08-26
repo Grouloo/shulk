@@ -18,15 +18,10 @@ export class MatchStateExpression<T extends stateobj> {
 	}
 
 	case<Output>(lookup: LookupStateFn<T, unknown>): Output {
-		if (
-			this.input._state in lookup &&
-			typeof lookup[this.input._state as T['_state']] == 'function'
-		) {
-			return (
-				lookup[this.input._state as T['_state']] as Handler<
-					typeof this.input
-				>
-			)(this.input) as Output
+		const fn = lookup[this.input._state as T['_state']]
+
+		if (this.input._state in lookup && typeof fn == 'function') {
+			return fn(this.input) as Output
 		}
 
 		if ('_otherwise' in lookup) {

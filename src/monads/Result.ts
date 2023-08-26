@@ -71,11 +71,11 @@ class ResultImpl<ErrType, OkType> implements ResultMethod<ErrType, OkType> {
 	}
 
 	unwrap(): OkType {
-		return match(this).case({
+		return match(this as Result<ErrType, OkType>).case({
 			Err: (res) => {
 				throw res.val
 			},
-			Ok: (res) => res.val,
+			Ok: ({ val }) => val,
 		})
 	}
 
@@ -85,14 +85,14 @@ class ResultImpl<ErrType, OkType> implements ResultMethod<ErrType, OkType> {
 				throw message
 			},
 			Ok: () => this.val as OkType,
-		})
+		}) as OkType
 	}
 
 	unwrapOr<T>(otherwise: T): OkType | T {
-		return match(this).case({
+		return match(this as Result<ErrType, OkType>).case({
 			Err: () => otherwise,
 			Ok: ({ val }) => val,
-		})
+		}) as OkType | T
 	}
 
 	toMaybe(): Maybe<OkType> {
