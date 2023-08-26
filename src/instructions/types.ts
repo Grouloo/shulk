@@ -8,7 +8,7 @@ export type Lookup<T extends string | number, Output> =
 			_otherwise: Output
 	  })
 
-export type Handler<T, Output> = (val: T) => Output
+export type Handler<T, Output = unknown> = (val: T) => Output
 
 export type LookupFn<T extends string | number, Output> =
 	| {
