@@ -1,8 +1,8 @@
 import { expect, test } from '@jest/globals'
-import { tuple } from '../Tuple'
+import { Tuple, tuple } from '../Tuple'
 
 test('tuple creation', () => {
-	const myTuple = tuple('noah', 'mio')
+	const myTuple: Tuple<['noah', 'mio']> = tuple('noah', 'mio')
 
 	expect(myTuple).toEqual(['noah', 'mio'])
 })

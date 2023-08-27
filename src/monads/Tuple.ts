@@ -1,3 +1,5 @@
-export type Tuple<A, B> = [A, B]
+export type Tuple<T extends ReadonlyArray<unknown>> = T
 
-export const tuple = <A, B>(a: A, b: B): Tuple<A, B> => [a, b]
+export function tuple<T extends Array<unknown>>(...params: T): Tuple<T> {
+	return [...params] as Tuple<T>
+}
