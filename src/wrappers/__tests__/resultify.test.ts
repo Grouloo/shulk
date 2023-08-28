@@ -1,5 +1,5 @@
-import { test, expect } from '@jest/globals'
-import { resultify } from '../resultify'
+import { test, expect, it, describe } from '@jest/globals'
+import { asyncResultify, resultify } from '../resultify'
 
 function divide(dividend: number, divisor: number): number {
 	if (divisor == 0) {
@@ -22,4 +22,20 @@ test('should return Err state', () => {
 
 	expect(result._state).toBe('Err')
 	expect(result.val).toBeInstanceOf(Error)
+})
+
+describe('async tests', () => {
+	async function saysAsync(): Promise<string> {
+		return 'I am async'
+	}
+
+	const safeSaysAsync = asyncResultify(saysAsync)
+
+	it('should return a Promise', async () => {
+		expect(safeSaysAsync()).toBeInstanceOf(Promise)
+	})
+
+	it('should return a string', async () => {
+		expect((await safeSaysAsync()).unwrap()).toBe('I am async')
+	})
 })

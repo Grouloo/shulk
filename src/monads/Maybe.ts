@@ -71,3 +71,5 @@ export function Some<T>(val: T) {
 		unwrapOr: <O>(otherwise: O) => unwrapOr<T, O>(impl, otherwise),
 	}
 }
+
+export type AsyncMaybe<T> = Promise<Maybe<T>>
