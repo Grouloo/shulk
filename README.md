@@ -12,6 +12,8 @@ Shulk enhances your TypeScript code by providing a typesafe `match` expression, 
 npm i shulk
 # OR
 yarn add shulk
+# OR
+bun add shulk
 ```
 
 ## How to use
