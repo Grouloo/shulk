@@ -29,7 +29,9 @@ export function $defMacro<
 	return new Proxy(lookup, {
 		get: (target, property: string, handle) => {
 			if (property in target.methods) {
-				return (...args: never) => target.methods[property](handle, ...args)
+				return (
+					...args: never[] // @ts-ignore
+				) => target.methods[property](handle, ...args)
 			}
 			return target.props[property]
 		},

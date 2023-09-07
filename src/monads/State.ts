@@ -1,8 +1,8 @@
-type States = {
+export type States = {
 	[x: string]: any
 }
 
-type StatesRes<T extends States> = {
+export type StatesRes<T extends States> = {
 	readonly [x in keyof T]: (
 		val: T[x],
 	) => T[x] extends object

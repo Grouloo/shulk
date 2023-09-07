@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@jest/globals'
+import { expect, it, describe } from 'bun:test'
 import match from '../match'
 
 enum Emotion {

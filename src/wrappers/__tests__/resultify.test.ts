@@ -1,4 +1,4 @@
-import { test, expect, it, describe } from '@jest/globals'
+import { expect, it, describe } from 'bun:test'
 import { asyncResultify, resultify } from '../resultify'
 
 function divide(dividend: number, divisor: number): number {
@@ -10,14 +10,14 @@ function divide(dividend: number, divisor: number): number {
 
 const safeDivide = resultify<Error, typeof divide>(divide)
 
-test('should return Ok state', () => {
+it('should return Ok state', () => {
 	const result = safeDivide(2, 2)
 
 	expect(result._state).toBe('Ok')
 	expect(result.val).toBe(1)
 })
 
-test('should return Err state', () => {
+it('should return Err state', () => {
 	const result = safeDivide(2, 0)
 
 	expect(result._state).toBe('Err')

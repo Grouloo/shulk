@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals'
+import { expect, it, describe } from 'bun:test'
 import { Maybe, None, Some } from '../Maybe'
 import match from '../../instructions/match'
 

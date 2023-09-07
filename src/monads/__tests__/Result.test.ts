@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals'
+import { expect, it, describe } from 'bun:test'
 import { Err, Result, Ok } from '../Result'
 import match from '../../instructions/match'
 
@@ -58,7 +58,7 @@ describe('expect tests', () => {
 	})
 
 	it('should return the otherwise when unwrapping Err state', () => {
-		expect(() => FAILED.expect(EXPECTED)).toThrowError(EXPECTED)
+		expect(() => FAILED.expect(EXPECTED)).toThrow(EXPECTED)
 	})
 })
 

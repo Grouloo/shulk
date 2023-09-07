@@ -1,4 +1,4 @@
-import { expect, it, describe } from '@jest/globals'
+import { expect, it, describe } from 'bun:test'
 import { State, state } from '../State'
 
 const Television = state<{

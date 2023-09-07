@@ -1,4 +1,4 @@
-import { test, expect, describe } from '@jest/globals'
+import { expect, it, describe } from 'bun:test'
 import { maybify } from '../maybify'
 
 function divide(dividend: number, divisor: number): number | null {
@@ -19,14 +19,14 @@ const safeDivide = maybify(divide)
 const safeBarIfFoo = maybify(barIfFoo)
 
 describe('undefined related tests', () => {
-	test('should return Some state', () => {
+	it('should return Some state', () => {
 		const result = safeBarIfFoo('foo')
 
 		expect(result._state).toBe('Some')
 		expect(result.unwrap()).toBe('bar')
 	})
 
-	test('should return None state', () => {
+	it('should return None state', () => {
 		const result = safeBarIfFoo('oh no!')
 
 		expect(result._state).toBe('None')
@@ -35,14 +35,14 @@ describe('undefined related tests', () => {
 })
 
 describe('null related tests', () => {
-	test('should return Some state', () => {
+	it('should return Some state', () => {
 		const result = safeDivide(2, 2)
 
 		expect(result._state).toBe('Some')
 		expect(result.unwrap()).toBe(1)
 	})
 
-	test('should return None state', () => {
+	it('should return None state', () => {
 		const result = safeDivide(2, 0)
 
 		expect(result._state).toBe('None')
@@ -51,14 +51,14 @@ describe('null related tests', () => {
 })
 
 describe('NaN related tests', () => {
-	test('should return Some state', () => {
+	it('should return Some state', () => {
 		const result = safeSqrt(1)
 
 		expect(result._state).toBe('Some')
 		expect(result.unwrap()).toBe(1)
 	})
 
-	test('should return None state', () => {
+	it('should return None state', () => {
 		const result = safeSqrt(-1)
 
 		expect(result._state).toBe('None')
