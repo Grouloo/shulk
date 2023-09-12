@@ -24,9 +24,6 @@ export { resultify, asyncResultify }
 import { maybify, asyncMaybify } from './wrappers/maybify'
 export { maybify, asyncMaybify }
 
-import { $defMacro } from './instructions/defMacro'
-export { $defMacro }
-
 import isObject from './typecheck/isObject'
 import isState from './typecheck/isState'
 export { isObject, isState }

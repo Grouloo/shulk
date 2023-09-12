@@ -6,6 +6,7 @@
 		"type": "git",
 		"url": "https://github.com/Grouloo/shulk"
 	},
+	"type": "module",
 	"keywords": [
 		"monad",
 		"monads",
@@ -24,8 +25,10 @@
 		"lib",
 		"README.md"
 	],
+	"main": "./lib/index.js",
+	"module": "./lib/index.js",
 	"scripts": {
-		"build": "tsc --watch",
+		"build": "tsc -p ./tsconfig.build.json --watch",
 		"test": "bun test",
 		"push": "bun test && tsc -p ./tsconfig.build.json && yarn publish"
 	},
