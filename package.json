@@ -26,8 +26,8 @@
 	],
 	"scripts": {
 		"build": "tsc --watch",
-		"test": "tsc && bun test",
-		"push": "yarn test && yarn publish"
+		"test": "bun test",
+		"push": "bun test && tsc -p ./tsconfig.build.json && yarn publish"
 	},
 	"devDependencies": {
 		"bun-types": "^0.8.1",

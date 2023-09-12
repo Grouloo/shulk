@@ -19,5 +19,5 @@
 		"types": ["bun-types"]
 	},
 	"include": ["src"],
-	"exclude": ["lib", "node_modules", "src/**/*.test.ts"]
+	"exclude": ["lib", "node_modules"]
 }
