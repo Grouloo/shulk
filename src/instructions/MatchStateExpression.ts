@@ -17,16 +17,17 @@ export class MatchStateExpression<T extends stateobj> {
 		throw Error('Value did not match with anything.')
 	}
 
-	case<Output>(lookup: LookupStateFn<T, unknown>): Output {
+	case<Output>(lookup: LookupStateFn<T, Output>): Output {
 		if (
 			this.input._state in lookup &&
 			typeof lookup[this.input._state as T['_state']] == 'function'
 		) {
 			return (
 				lookup[this.input._state as T['_state']] as Handler<
-					typeof this.input
+					typeof this.input,
+					Output
 				>
-			)(this.input) as Output
+			)(this.input)
 		}
 
 		if ('_otherwise' in lookup) {
@@ -35,14 +36,20 @@ export class MatchStateExpression<T extends stateobj> {
 
 		throw Error('Value did not match with anything.')
 	}
+
+	returnType<Output>() {
+		const caseFn = this.case<Output>
+
+		return { input: this.input, case: caseFn }
+	}
 }
 
 type LookupStateFn<T extends stateobj, Output> =
 	| {
-			[x in T['_state']]: Handler<T>
+			[x in T['_state']]: Handler<T, Output>
 	  }
 	| ({
-			[x in T['_state']]?: Handler<T>
+			[x in T['_state']]?: Handler<T, Output>
 	  } & {
-			_otherwise: Handler<T>
+			_otherwise: Handler<T, Output>
 	  })

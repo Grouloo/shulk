@@ -71,28 +71,34 @@ class ResultImpl<ErrType, OkType> implements ResultMethod<ErrType, OkType> {
 	}
 
 	unwrap(): OkType {
-		return match(this as Result<ErrType, OkType>).case({
-			Err: (res) => {
-				throw res.val
-			},
-			Ok: ({ val }) => val,
-		})
+		return match(this as Result<ErrType, OkType>)
+			.returnType<OkType>()
+			.case({
+				Err: (res) => {
+					throw res.val
+				},
+				Ok: ({ val }) => val,
+			})
 	}
 
 	expect(message: string): OkType {
-		return match(this).case({
-			Err: () => {
-				throw message
-			},
-			Ok: () => this.val as OkType,
-		}) as OkType
+		return match(this as Result<ErrType, OkType>)
+			.returnType<OkType>()
+			.case({
+				Err: () => {
+					throw message
+				},
+				Ok: ({ val }) => val,
+			})
 	}
 
 	unwrapOr<T>(otherwise: T): OkType | T {
-		return match(this as Result<ErrType, OkType>).case({
-			Err: () => otherwise,
-			Ok: ({ val }) => val,
-		}) as OkType | T
+		return match(this as Result<ErrType, OkType>)
+			.returnType<OkType | T>()
+			.case({
+				Err: () => otherwise,
+				Ok: ({ val }) => val,
+			})
 	}
 
 	toMaybe(): Maybe<OkType> {

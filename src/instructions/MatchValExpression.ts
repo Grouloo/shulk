@@ -1,4 +1,4 @@
-import { Handler, Lookup, LookupFn } from './types'
+import { Lookup, LookupFn } from './types'
 
 export class MatchValExpression<T extends string | number> {
 	constructor(protected input: T) {}
@@ -15,7 +15,7 @@ export class MatchValExpression<T extends string | number> {
 		throw Error('Value did not match with anything.')
 	}
 
-	case<Output>(lookup: LookupFn<T, unknown>): Output {
+	case<Output>(lookup: LookupFn<T, Output>): Output {
 		const fn = lookup[this.input]
 
 		if (this.input in lookup && typeof fn == 'function') {
@@ -27,5 +27,11 @@ export class MatchValExpression<T extends string | number> {
 		}
 
 		throw Error('Value did not match with anything.')
+	}
+
+	returnType<Output>() {
+		const caseFn = this.case<Output>
+
+		return { case: caseFn }
 	}
 }

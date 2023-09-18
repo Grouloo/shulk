@@ -99,10 +99,12 @@ describe('match tests', () => {
 	const HANDLED_ERR = 'handled err path'
 
 	function matchDivision(res: Result<Error, number>) {
-		return match(res).case({
-			Err: () => HANDLED_ERR,
-			Ok: ({ val }) => val,
-		})
+		return match(res)
+			.returnType<string | number>()
+			.case({
+				Err: () => HANDLED_ERR,
+				Ok: ({ val }) => val,
+			})
 	}
 
 	it('it should handle Ok path', () => {

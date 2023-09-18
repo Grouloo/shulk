@@ -9,7 +9,7 @@ enum Emotion {
 	SCARED,
 }
 
-function emotion2smiley(emotion: Emotion) {
+function emotion2smiley(emotion: Emotion): string {
 	return match(emotion).with({
 		[Emotion.HAPPY]: ':D',
 		[Emotion.SAD]: ':(',
@@ -19,11 +19,6 @@ function emotion2smiley(emotion: Emotion) {
 }
 
 function emotionIndex(emotion: Emotion): string | null {
-	// const res = match(emotion)
-	// 	.when.case(Emotion.HAPPY, (val) => `Index for happy is ${val}`)
-	// 	.exhaustive()
-
-	// return res
 	return match(emotion).case({
 		[Emotion.HAPPY]: (val) => `Index for happy is ${val}`,
 		[Emotion.SAD]: (val) => `Index for sad is ${val}`,

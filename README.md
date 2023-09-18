@@ -69,11 +69,13 @@ Now, let's try to use functions:
 
 ```ts
 function makeSound(pet: Pet) {
-	return match(pet).case({
-		cat: (val) => console.log(`${val}: meow`),
-		dog: () => console.log(`${val}: bark`),
-		hamster: () => console.log(`${val}: squeak`),
-	})
+	return match(pet)
+		.returnType<void>()
+		.case({
+			cat: (val) => console.log(`${val}: meow`),
+			dog: () => console.log(`${val}: bark`),
+			hamster: () => console.log(`${val}: squeak`),
+		})
 }
 
 console.log(makeSound('cat')) // > "cat: meow"
@@ -277,7 +279,9 @@ Let's use the Loading monad in a Svelte JS application:
 	function OnMount() {
 		const res: Result<Error, string> = await doSomething()
 
-		loading = match(res).case({
+		loading = match(res)
+			.returnType<Loading<Error, string>>()
+			.case({
 			Err: ({ val }) => Failed(val),
 			Ok: ({ val }) => Done(val)
 		})
