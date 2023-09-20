@@ -5,7 +5,7 @@ import { state } from './State'
  * State lets us handle data loading and error handling in a much clearer way
  */
 export type Loading<FailedType, DoneType> =
-	| { val: undefined; _state: 'Pending' }
+	| { _state: 'Pending' }
 	| { val: FailedType; _state: 'Failed' }
 	| { val: DoneType; _state: 'Done' }
 

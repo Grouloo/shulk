@@ -102,6 +102,8 @@ Shulk states allows you to make invalid states like this irrepresentable in the 
 
 #### Use states
 
+States are unions of types representing immutable data, hugely inspired by Rust's enums.
+
 Let's rewrite our Television model with Shulk states:
 
 ```ts
@@ -111,21 +113,32 @@ const Television = state<{
 	On: { currentChannel: number }
 	Off: {}
 }>()
+type Television = State<typeof Television>
 ```
 
 So, we just created a model with 2 states: the Television can be `On` and have a `currentChannel` property, or it can be `Off` and have no property.
 
+The Television type we declared here can be transcribed to:
+
+```ts
+type Television = {
+	On: { currentChannel: number; _state: 'On' }
+	Off: { _state: 'Off' }
+	any: { currentChannel: number; _state: 'On' } | { _state: 'Off' }
+}
+```
+
 Let's use our Television:
 
 ```ts
-const onTV = Television.On({ currentChannel: 12 })
+const onTV: Television['On'] = Television.On({ currentChannel: 12 })
 console.log(onTV.currentChannel) // > 12
 
-const offTV = Television.Off({})
+const offTV: Television['Off'] = Television.Off({})
 console.log(offTV.currentChannel) // > error TS2339: Property 'currentChannel' does not exist on type '{ _state: "Off"}'
 ```
 
-#### Pattern matching using States
+#### You can 'match' states!
 
 Guess what? You can evaluate states in a match expression:
 
