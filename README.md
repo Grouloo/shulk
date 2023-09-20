@@ -4,7 +4,7 @@ Write beautiful code that won't crash.
 
 ## Description
 
-Shulk enhances your TypeScript code by providing a typesafe `match` expression, monads, and a better way to handle states and polymorphism.
+Shulk is an _opinionated_ TypeScript library that enhances your TypeScript code by providing a typesafe `match` expression, monads, and a better way to handle states and polymorphism.
 
 ## Get started
 
