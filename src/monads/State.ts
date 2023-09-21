@@ -1,5 +1,3 @@
-import { Prettify } from '../types'
-
 export type States = {
 	[x: string]: any
 }
