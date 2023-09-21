@@ -32,6 +32,6 @@ export class MatchValExpression<T extends string | number> {
 	returnType<Output>() {
 		const caseFn = this.case<Output>
 
-		return { case: caseFn }
+		return { input: this.input, case: caseFn }
 	}
 }
