@@ -2,7 +2,7 @@ import { Handler, Lookup } from './types'
 
 export type stateobj = { _state: string }
 
-export class MatchStateExpression<T extends stateobj> {
+export class MatchState<T extends stateobj> {
 	constructor(protected input: T) {}
 
 	with<Output>(lookup: Lookup<T['_state'], Output>): Output {

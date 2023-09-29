@@ -1,6 +1,6 @@
 import { Lookup, LookupFn } from './types'
 
-export class MatchValExpression<T extends string | number> {
+export class MatchVal<T extends string | number> {
 	constructor(protected input: T) {}
 
 	with<Output>(lookup: Lookup<T, Output>): Output {

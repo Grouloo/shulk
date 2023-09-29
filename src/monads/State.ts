@@ -2,21 +2,21 @@ export type States = {
 	[x: string]: any
 }
 
+type Prettify<T> = { [x in keyof T]: T[x] } & {}
+
 export type StatesRes<T extends States> = {
 	[x in keyof T]: (
 		val: T[x],
 	) => T[x] extends object
-		? Readonly<T[x] & { _state: x }>
-		: Readonly<{ val: T[x]; _state: x }>
+		? Prettify<
+				{ readonly [k in keyof T[x]]: T[x][k] } & { readonly _state: x }
+		  >
+		: { readonly val: T[x]; readonly _state: x }
 }
 
 export type State<T extends { [x: string]: (val: any) => unknown }> = {
 	[k in keyof T]: ReturnType<T[k]>
 } & { any: ReturnType<T[keyof T]> }
-
-type AllStates<T extends StatesRes<States>> = ReturnType<T[keyof T]>
-
-// export type All<T extends State> =
 
 export function state<T extends States>(): StatesRes<T> {
 	return new Proxy(

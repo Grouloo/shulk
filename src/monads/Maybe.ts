@@ -1,25 +1,30 @@
-import { state } from './State'
+import { State, state } from './State'
+
+type Prettify<T> = { [x in keyof T]: T[x] } & {}
 
 const RawMaybe = state<{ None: {}; Some: { val: any } }>()
+type RawMaybe = State<typeof RawMaybe>
 
-export type Maybe<T> = ({ _state: 'None' } | { val: T; _state: 'Some' }) & {
-	/**
-	 * Throws if Maybe has a None state
-	 * @returns
-	 */
-	unwrap(): T
-	/**
-	 * Throws the message if Maybe has a None state
-	 * @returns
-	 */
-	expect(message: string): T
-	/**
-	 * Returns the Some type or the parameter
-	 * @param otherwise
-	 * @returns
-	 */
-	unwrapOr<O>(otherwise: O): T | O
-}
+export type Maybe<T> = Prettify<
+	({ _state: 'None' } | { val: T; _state: 'Some' }) & {
+		/**
+		 * Throws if Maybe has a None state
+		 * @returns
+		 */
+		unwrap(): T
+		/**
+		 * Throws the message if Maybe has a None state
+		 * @returns
+		 */
+		expect(message: string): T
+		/**
+		 * Returns the Some type or the parameter
+		 * @param otherwise
+		 * @returns
+		 */
+		unwrapOr<O>(otherwise: O): T | O
+	}
+>
 
 function createMaybe<T>(type: 'Some' | 'None', val?: T): Maybe<T> {
 	const self = RawMaybe[type]({ val })

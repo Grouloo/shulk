@@ -1,6 +1,8 @@
 import match from '../instructions/match'
 import { Maybe, None, Some } from './Maybe'
 
+type Prettify<T> = { [x in keyof T]: T[x] } & {}
+
 interface ResultMethod<ErrType, OkType> {
 	/**
 	 * Returns true if Result has an Ok state
@@ -45,8 +47,9 @@ interface ResultMethod<ErrType, OkType> {
 
 type OkState<OkType> = { val: OkType; _state: 'Ok' }
 type ErrState<ErrType> = { val: ErrType; _state: 'Err' }
-export type Result<ErrType, OkType> = (ErrState<ErrType> | OkState<OkType>) &
-	ResultMethod<ErrType, OkType>
+export type Result<ErrType, OkType> = Prettify<
+	(ErrState<ErrType> | OkState<OkType>) & ResultMethod<ErrType, OkType>
+>
 
 class ResultImpl<ErrType, OkType> implements ResultMethod<ErrType, OkType> {
 	private constructor(
