@@ -210,6 +210,26 @@ divide(2, 0).isErr() // true
 // It is safe to use
 divide(2, 2).val // 1
 divide(2, 0).val // "Cannot divide by 0!"
+
+// map() takes a function as an argument and return its value wrapped in an Ok state, or an Err state
+divide(2, 2)
+	.map((res) => res.toString())
+	.unwrap() // "1"
+divide(2, 0)
+	.map((res) => res.toString())
+	.unwrap() // Uncaught Cannot divide by 0!
+
+// flatMap() takes a function that returns a Result, and return its value
+divide(2, 2)
+	.flatMap((res) => Ok(res.toString()))
+	.unwrap() // "1"
+divide(2, 0)
+	.flatMap((res) => Ok(res.toString()))
+	.unwrap() // Uncaught Cannot divide by 0!
+
+// flatMapAsync() takes a function that returns a Result, and return its value in a Promise
+divide(2, 2).flatMap((res) => Ok(res.toString())) // Promise
+divide(2, 0).flatMap((res) => Ok(res.toString())) // Promise
 ```
 
 #### Result and pattern matching
@@ -262,6 +282,22 @@ divide(2, 0).expect('Too bad!') // Uncaught Too bad!
 // It is safe to use in a production context, as the program cannot crash
 divide(2, 2).unwrapOr('Not a number') // 1
 divide(2, 0).unwrapOr('Not a number') // "Not a number"
+
+// map() takes a function as an argument and return its value wrapped in a Some state, or a None state
+divide(2, 2)
+	.map((res) => res.toString())
+	.unwrap() // "1"
+divide(2, 0)
+	.map((res) => res.toString())
+	.unwrap() // Uncaught Error: Maybe is None
+
+// flatMap() takes a function that returns a Maybe as an argument, and return its value
+divide(2, 2)
+	.flatMap((res) => Some(res.toString()))
+	.unwrap() // "1"
+divide(2, 0)
+	.flatMap((res) => Some(res.toString()))
+	.unwrap() // Uncaught Error: Maybe is None
 ```
 
 #### Maybe and pattern matching

@@ -95,6 +95,38 @@ describe('toMaybe tests', () => {
 	})
 })
 
+describe('map tests', () => {
+	it('should return a string', () => {
+		const mapped = SUCCESS.map((val) => val.toString())
+
+		expect(mapped._state).toBe('Ok')
+		expect(mapped.val).toBe('1')
+	})
+
+	it('should return an Error', () => {
+		const mapped = FAILED.map((val) => val.toString())
+
+		expect(mapped._state).toBe('Err')
+		expect(mapped.val).toBeInstanceOf(Error)
+	})
+})
+
+describe('flatMap tests', () => {
+	it('should return a string', () => {
+		const mapped = SUCCESS.flatMap((val) => Ok(val.toString()))
+
+		expect(mapped._state).toBe('Ok')
+		expect(mapped.val).toBe('1')
+	})
+
+	it('should return an Error', () => {
+		const mapped = FAILED.flatMap((val) => Ok(val.toString()))
+
+		expect(mapped._state).toBe('Err')
+		expect(mapped.val).toBeInstanceOf(Error)
+	})
+})
+
 describe('match tests', () => {
 	const HANDLED_ERR = 'handled err path'
 

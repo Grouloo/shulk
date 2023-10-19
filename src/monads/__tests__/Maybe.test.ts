@@ -51,6 +51,38 @@ describe('unwrapOr method tests', () => {
 	})
 })
 
+describe('map tests', () => {
+	it('should return a string', () => {
+		const mapped = doSomething(true).map((val) => val.toUpperCase())
+
+		expect(mapped._state).toBe('Some')
+		expect(mapped.unwrap()).toBe(HERE_WE_GO.toUpperCase())
+	})
+
+	it('should return None', () => {
+		const mapped = doSomething(false).map((val) => val.toUpperCase())
+
+		expect(mapped._state).toBe('None')
+	})
+})
+
+describe('flatMap tests', () => {
+	it('should return a string', () => {
+		const mapped = doSomething(true).flatMap((val) => Some(val.toUpperCase()))
+
+		expect(mapped._state).toBe('Some')
+		expect(mapped.unwrap()).toBe(HERE_WE_GO.toUpperCase())
+	})
+
+	it('should return None', () => {
+		const mapped = doSomething(false).flatMap((val) =>
+			Some(val.toUpperCase()),
+		)
+
+		expect(mapped._state).toBe('None')
+	})
+})
+
 describe('match Maybe tests', () => {
 	function matchMaybe(maybe: Maybe<string>) {
 		return match(maybe).case({

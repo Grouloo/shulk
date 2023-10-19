@@ -23,6 +23,18 @@ export type Maybe<T> = Prettify<
 		 * @returns
 		 */
 		unwrapOr<O>(otherwise: O): T | O
+
+		/**
+		 * Returns the value returned by the handler, wrapped in a new Maybe monad
+		 * @param handler
+		 */
+		map<O>(handler: (val: T) => O): Maybe<O>
+
+		/**
+		 * Returns the new Maybe monad returned by the handler
+		 * @param handler
+		 */
+		flatMap<O>(handler: (val: T) => Maybe<O>): Maybe<O>
 	}
 >
 
@@ -50,6 +62,22 @@ function createMaybe<T>(type: 'Some' | 'None', val?: T): Maybe<T> {
 				return self.val
 			}
 			return otherwise
+		},
+
+		map<O>(handler: (val: T) => O): Maybe<O> {
+			if (self._state == 'None') {
+				return None()
+			}
+
+			return Some(handler(self.val))
+		},
+
+		flatMap<O>(handler: (val: T) => Maybe<O>): Maybe<O> {
+			if (self._state == 'None') {
+				return None()
+			}
+
+			return handler(self.val)
 		},
 	}
 }

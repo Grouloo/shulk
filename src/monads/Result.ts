@@ -43,6 +43,36 @@ interface ResultMethod<ErrType, OkType> {
 	 * -Ok translating to the Some state
 	 */
 	toMaybe(): Maybe<OkType>
+
+	/**
+	 * Returns a new Result monad with the result of the handler as the Ok value
+	 * @param handler
+	 */
+	map<O>(handler: (val: OkType) => O): Result<ErrType, O>
+
+	/**
+	 * Returns the new Result monad returned by the handler
+	 * @param handler
+	 */
+	flatMap<E, O>(handler: (val: OkType) => Result<E, O>): Result<E | ErrType, O>
+
+	/**
+	 * Returns the new Result monad wrapped in a Promise returned by the handler
+	 * @param handler
+	 */
+	flatMapAsync<E, O>(
+		handler: (val: OkType) => AsyncResult<E, O>,
+	): AsyncResult<E | ErrType, O>
+
+	/**
+	 * Evaluates the provided condition and returns a new Monad result
+	 * @param checker
+	 * @param otherwise
+	 */
+	filter<E, O extends OkType>(
+		checker: (val: OkType) => val is O,
+		otherwise: () => E,
+	): Result<E | ErrType, O>
 }
 
 type OkState<OkType> = { val: OkType; _state: 'Ok' }
@@ -109,6 +139,55 @@ class ResultImpl<ErrType, OkType> implements ResultMethod<ErrType, OkType> {
 			return Some(this.val)
 		}
 		return None()
+	}
+
+	map<O>(handler: (val: OkType) => O): Result<ErrType, O> {
+		return match(this as Result<ErrType, OkType>)
+			.returnType<Result<ErrType, O>>()
+			.case({
+				Err: (result) => Err(result.val),
+				Ok: ({ val }) => Ok(handler(val)),
+			})
+	}
+
+	flatMap<E, O>(
+		handler: (val: OkType) => Result<E, O>,
+	): Result<E | ErrType, O> {
+		return match(this as Result<ErrType, OkType>)
+			.returnType<Result<E | ErrType, O>>()
+			.case({
+				Err: (result) => Err(result.val),
+				Ok: ({ val }) => handler(val),
+			})
+	}
+
+	flatMapAsync<E, O>(
+		handler: (val: OkType) => AsyncResult<E, O>,
+	): AsyncResult<E | ErrType, O> {
+		return match(this as Result<ErrType, OkType>)
+			.returnType<AsyncResult<E | ErrType, O>>()
+			.case({
+				Err: async (result) => Err(result.val),
+				Ok: async ({ val }) => await handler(val),
+			})
+	}
+
+	filter<E, O extends OkType>(
+		checker: (val: OkType) => val is O,
+		otherwise: () => E,
+	): Result<E | ErrType, O> {
+		return match(this as Result<ErrType, OkType>)
+			.returnType<Result<E | ErrType, O>>()
+			.case({
+				Err: (result) => Err(result.val),
+				Ok: ({ val }) => {
+					if (checker(val)) {
+						return Ok(val)
+					} else {
+						return Err(otherwise())
+					}
+				},
+			})
 	}
 }
 
