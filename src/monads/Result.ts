@@ -51,6 +51,12 @@ interface ResultMethod<ErrType, OkType> {
 	map<O>(handler: (val: OkType) => O): Result<ErrType, O>
 
 	/**
+	 * Returns a new Result monad with the result of the handler as the Err value
+	 * @param handler
+	 */
+	mapErr<E>(handler: (val: ErrType) => E): Result<E, OkType>
+
+	/**
 	 * Returns the new Result monad returned by the handler
 	 * @param handler
 	 */
@@ -147,6 +153,15 @@ class ResultImpl<ErrType, OkType> implements ResultMethod<ErrType, OkType> {
 			.case({
 				Err: (result) => Err(result.val),
 				Ok: ({ val }) => Ok(handler(val)),
+			})
+	}
+
+	mapErr<E>(handler: (val: ErrType) => E): Result<E, OkType> {
+		return match(this as Result<ErrType, OkType>)
+			.returnType<Result<E, OkType>>()
+			.case({
+				Err: ({ val }) => Err(handler(val)),
+				Ok: ({ val }) => Ok(val),
 			})
 	}
 

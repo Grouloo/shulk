@@ -111,6 +111,22 @@ describe('map tests', () => {
 	})
 })
 
+describe('mapErr tests', () => {
+	it('should return a number', () => {
+		const mapped = SUCCESS.mapErr((val) => new TypeError(val.message))
+
+		expect(mapped._state).toBe('Ok')
+		expect(mapped.val).toBe(1)
+	})
+
+	it('should return a TypeError', () => {
+		const mapped = FAILED.mapErr((val) => new TypeError(val.message))
+
+		expect(mapped._state).toBe('Err')
+		expect(mapped.val).toBeInstanceOf(TypeError)
+	})
+})
+
 describe('flatMap tests', () => {
 	it('should return a string', () => {
 		const mapped = SUCCESS.flatMap((val) => Ok(val.toString()))
