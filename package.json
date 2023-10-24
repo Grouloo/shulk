@@ -1,6 +1,6 @@
 {
 	"name": "shulk",
-	"version": "0.10.1",
+	"version": "0.10.2",
 	"description": "Attempt to bring functionnal programming concepts to TypeScript",
 	"repository": {
 		"type": "git",
