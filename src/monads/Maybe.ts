@@ -1,3 +1,4 @@
+import { Err, Ok, Result } from './Result'
 import { State, state } from './State'
 
 type Prettify<T> = { [x in keyof T]: T[x] } & {}
@@ -35,6 +36,13 @@ export type Maybe<T> = Prettify<
 		 * @param handler
 		 */
 		flatMap<O>(handler: (val: T) => Maybe<O>): Maybe<O>
+
+		/**
+		 * Returns a Result monad where the Ok state translates to the Some state
+		 * The Err state will contain the value passed as an argument
+		 * @param err
+		 */
+		toResult<E>(err: () => E): Result<E, T>
 	}
 >
 
@@ -75,9 +83,17 @@ function createMaybe<T>(type: 'Some' | 'None', val?: T): Maybe<T> {
 		flatMap<O>(handler: (val: T) => Maybe<O>): Maybe<O> {
 			if (self._state == 'None') {
 				return None()
+			} else {
+				return handler(self.val)
 			}
+		},
 
-			return handler(self.val)
+		toResult(err) {
+			if (self._state == 'None') {
+				return Err(err())
+			} else {
+				return Ok(self.val)
+			}
 		},
 	}
 }

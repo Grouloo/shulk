@@ -127,6 +127,38 @@ describe('mapErr tests', () => {
 	})
 })
 
+describe('filter tests', () => {
+	it('should return 1', () => {
+		const mapped = SUCCESS.filter(
+			(val): val is number => val == 1,
+			() => false,
+		)
+
+		expect(mapped._state).toBe('Ok')
+		expect(mapped.val).toBe(1)
+	})
+
+	it('should return false', () => {
+		const mapped = divide(4, 2).filter(
+			(val): val is number => val == 1,
+			() => false,
+		)
+
+		expect(mapped._state).toBe('Err')
+		expect(mapped.val).toBe(false)
+	})
+
+	it('should return an Error', () => {
+		const mapped = FAILED.filter(
+			(val): val is number => val == 1,
+			() => false,
+		)
+
+		expect(mapped._state).toBe('Err')
+		expect(mapped.val).toBeInstanceOf(Error)
+	})
+})
+
 describe('flatMap tests', () => {
 	it('should return a string', () => {
 		const mapped = SUCCESS.flatMap((val) => Ok(val.toString()))

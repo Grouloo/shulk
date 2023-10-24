@@ -83,6 +83,22 @@ describe('flatMap tests', () => {
 	})
 })
 
+describe('toResult tests', () => {
+	it('should return an Ok Result', () => {
+		const mapped = doSomething(true).toResult(() => Error('Oh no'))
+
+		expect(mapped._state).toBe('Ok')
+		expect(mapped.val).toBe(HERE_WE_GO)
+	})
+
+	it('should return an Err Result', () => {
+		const mapped = doSomething(false).toResult(() => Error('Oh no'))
+
+		expect(mapped._state).toBe('Err')
+		expect(mapped.val).toBeInstanceOf(Error)
+	})
+})
+
 describe('match Maybe tests', () => {
 	function matchMaybe(maybe: Maybe<string>) {
 		return match(maybe).case({

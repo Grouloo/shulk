@@ -230,6 +230,16 @@ divide(2, 0)
 // flatMapAsync() takes a function that returns a Result, and return its value in a Promise
 divide(2, 2).flatMap((res) => Ok(res.toString())) // Promise
 divide(2, 0).flatMap((res) => Ok(res.toString())) // Promise
+
+// filter() evaluates a condition and returns a new Result
+divide(2, 2).filter(
+	(res): res is number => res == 1,
+	() => new Error('Result is not 1'),
+) // 1
+divide(4, 2).filter(
+	(res): res is number => res == 1,
+	() => 'Result is not 1',
+) // "Result is not 1"
 ```
 
 #### Result and pattern matching
@@ -298,6 +308,9 @@ divide(2, 2)
 divide(2, 0)
 	.flatMap((res) => Some(res.toString()))
 	.unwrap() // Uncaught Error: Maybe is None
+
+// toResult() maps the Maybe to a Result monad
+divide(2, 2).toResult(() => 'Cannot divide by 0') // Result<string, number>
 ```
 
 #### Maybe and pattern matching
