@@ -1,4 +1,5 @@
 import match from '../instructions/match'
+import { Done, Failed, Loading } from './Loading'
 import { Maybe, None, Some } from './Maybe'
 
 type Prettify<T> = { [x in keyof T]: T[x] } & {}
@@ -6,14 +7,14 @@ type Prettify<T> = { [x in keyof T]: T[x] } & {}
 interface ResultMethod<ErrType, OkType> {
 	/**
 	 * Returns true if Result has an Ok state
-	 * When true, the TS compiler will know val has an OkType
+	 * When true, the TS compiler will know val is of OkType
 	 * @returns
 	 */
 	isOk(): this is Result<never, OkType>
 
 	/**
 	 * Returns true if Result has an Err state
-	 * When true, the TS compiler will know val has an Errtype
+	 * When true, the TS compiler will know val is of ErrType
 	 * @returns
 	 */
 	isErr(): this is Result<ErrType, never>
@@ -43,6 +44,13 @@ interface ResultMethod<ErrType, OkType> {
 	 * -Ok translating to the Some state
 	 */
 	toMaybe(): Maybe<OkType>
+
+	/**
+	 * Transforms the Result into a Loading monad with:
+	 * -Err translating to the Failed state
+	 * -Ok translating to the Done state
+	 */
+	toLoading(): Loading<ErrType, OkType>
 
 	/**
 	 * Returns a new Result monad with the result of the handler as the Ok value
@@ -144,8 +152,18 @@ class ResultImpl<ErrType, OkType> implements ResultMethod<ErrType, OkType> {
 	toMaybe(): Maybe<OkType> {
 		if (this.isOk()) {
 			return Some(this.val)
+		} else {
+			return None()
 		}
-		return None()
+	}
+
+	toLoading(): Loading<ErrType, OkType> {
+		return match(this as Result<ErrType, OkType>)
+			.returnType<Loading<ErrType, OkType>>()
+			.case({
+				Err: ({ val }) => Failed(val),
+				Ok: ({ val }) => Done(val),
+			})
 	}
 
 	map<O>(handler: (val: OkType) => O): Result<ErrType, O> {

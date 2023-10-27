@@ -81,6 +81,30 @@ function makeSound(pet: Pet) {
 console.log(makeSound('cat')) // > "cat: meow"
 ```
 
+#### Match numbers
+
+When matching numbers, you can create a case for a specific number, but you can also create a case for numbers within a range!
+
+```ts
+// When provided an hour in format 24, the following function returns:
+// - 'Night' when hour is between 0 and 4
+// - 'Morning' when hour is between 5 and 11
+// - 'Noon' when hour is 12
+// - 'Afternoon' when hour is between 13 and 18
+// - 'Evening' when hour is between 18 and 23
+// - 'Not a valid hour' if hour didn't match any case
+function hourToPeriod(hour: number) {
+	return match(hour).with({
+		'0..4': 'Night',
+		'5..11': 'Morning',
+		12: 'Noon',
+		'13..18': 'Afternoon',
+		'18..23': 'Evening',
+		_otherwise: 'Not a valid hour',
+	})
+}
+```
+
 ### Polymorphism and state machines
 
 #### Why: OOP has a problem
@@ -138,14 +162,19 @@ const offTV: Television['Off'] = Television.Off({})
 console.log(offTV.currentChannel) // > error TS2339: Property 'currentChannel' does not exist on type '{ _state: "Off"}'
 ```
 
-#### You can 'match' states!
+#### You can match states!
 
-Guess what? You can evaluate states in a match expression:
+Guess what? You can evaluate states in a match expression, simply by using the name of each state. It will even infer the correct type when using the `case` method!
 
 ```ts
 match(myTV).with({
 	On: 'TV is on!',
 	Off: 'TV is off!',
+})
+
+match(myTV).case({
+	On: (tv: Television['On']) => 'TV is on!',
+	Off: (tv: Television['Off']) => 'TV is off!',
 })
 ```
 
@@ -344,9 +373,9 @@ Let's use the Loading monad in a Svelte JS application:
 		loading = match(res)
 			.returnType<Loading<Error, string>>()
 			.case({
-			Err: ({ val }) => Failed(val),
-			Ok: ({ val }) => Done(val)
-		})
+				Err: ({ val }) => Failed(val),
+				Ok: ({ val }) => Done(val)
+			})
 	}
 </script>
 
