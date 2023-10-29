@@ -1,5 +1,5 @@
 /* eslint-disable import/first */
-import match from './instructions/match'
+import match from './match/match'
 
 export { match }
 
@@ -17,6 +17,9 @@ export { Tuple, tuple }
 
 import { state, State } from './monads/State'
 export { state, State }
+
+import { Procedure } from './procedure/Procedure'
+export { Procedure }
 
 import { resultify, asyncResultify } from './wrappers/resultify'
 export { resultify, asyncResultify }

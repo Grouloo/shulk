@@ -1,4 +1,4 @@
-import match from '../instructions/match'
+import match from '../match/match'
 import { Done, Failed, Loading } from './Loading'
 import { Maybe, None, Some } from './Maybe'
 

@@ -1,6 +1,6 @@
 import { expect, it, describe } from 'bun:test'
 import { Maybe, None, Some } from '../Maybe'
-import match from '../../instructions/match'
+import match from '../../match/match'
 
 const HERE_WE_GO = 'here we go'
 

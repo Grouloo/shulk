@@ -1,6 +1,6 @@
 import { expect, it, describe } from 'bun:test'
 import { Err, Result, Ok } from '../Result'
-import match from '../../instructions/match'
+import match from '../../match/match'
 
 const CANNOT_DIVIDE = 'Cannot divide number by 0.'
 
