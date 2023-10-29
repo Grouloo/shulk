@@ -16,17 +16,48 @@ yarn add shulk
 bun add shulk
 ```
 
-## How to use
+## Table of contents
 
-### Pattern matching
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-#### Why: Every execution path should be handled
+- [Pattern matching](#pattern-matching)
+  - [Why: Every execution path should be handled](#why-every-execution-path-should-be-handled)
+  - [Use match](#use-match)
+  - [Match numbers](#match-numbers)
+- [Polymorphism and state machines](#polymorphism-and-state-machines)
+  - [Why: OOP has a problem](#why-oop-has-a-problem)
+  - [Use states](#use-states)
+  - [You can match states!](#you-can-match-states)
+- [Error handling](#error-handling)
+  - [Why: try/catch is unsafe](#why-trycatch-is-unsafe)
+  - [Use the Result monad](#use-the-result-monad)
+  - [Result and pattern matching](#result-and-pattern-matching)
+- [Optional value handling](#optional-value-handling)
+  - [Why: the Billion Dollar Mistake](#why-the-billion-dollar-mistake)
+  - [Use the Maybe monad](#use-the-maybe-monad)
+  - [Maybe and pattern matching](#maybe-and-pattern-matching)
+- [Handle loading](#handle-loading)
+  - [Use the Loading monad](#use-the-loading-monad)
+  - [Loading and pattern matching](#loading-and-pattern-matching)
+- [Procedural programming](#procedural-programming)
+  - [Why: Organizing concurrent tasks is a pain](#why-organizing-concurrent-tasks-is-a-pain)
+  - [Use Procedure](#use-procedure)
+- [Wrappers](#wrappers)
+  - [resultify](#resultify)
+  - [maybify](#maybify)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Pattern matching
+
+### Why: Every execution path should be handled
 
 In addition to being syntactically disgraceful, TypeScript `switch/case` statements are not safe, as the TypeScript compiler will not let you know that you forgot to handle some execution paths.
 
 This can cause errors, or even mistakes in your business logic.
 
-#### Use match
+### Use match
 
 You can use the `match` expression to return a certain value or execute a certain function when the input matches a certain value.
 
@@ -81,7 +112,7 @@ function makeSound(pet: Pet) {
 console.log(makeSound('cat')) // > "cat: meow"
 ```
 
-#### Match numbers
+### Match numbers
 
 When matching numbers, you can create a case for a specific number, but you can also create a case for numbers within a range!
 
@@ -105,9 +136,9 @@ function hourToPeriod(hour: number) {
 }
 ```
 
-### Polymorphism and state machines
+## Polymorphism and state machines
 
-#### Why: OOP has a problem
+### Why: OOP has a problem
 
 Let's try to model a Television using classic OOP. We want to know if the Television is on or off, and what channel it is displaying.
 
@@ -124,7 +155,7 @@ We could just write a getter that throws or return null if `this.isOn == false`,
 
 Shulk states allows you to make invalid states like this irrepresentable in the compiler, thus making your code safer.
 
-#### Use states
+### Use states
 
 States are unions of types representing immutable data, hugely inspired by Rust's enums.
 
@@ -162,7 +193,7 @@ const offTV: Television['Off'] = Television.Off({})
 console.log(offTV.currentChannel) // > error TS2339: Property 'currentChannel' does not exist on type '{ _state: "Off"}'
 ```
 
-#### You can match states!
+### You can match states!
 
 Guess what? You can evaluate states in a match expression, simply by using the name of each state. It will even infer the correct type when using the `case` method!
 
@@ -178,9 +209,9 @@ match(myTV).case({
 })
 ```
 
-### Error handling
+## Error handling
 
-#### Why: try/catch is unsafe
+### Why: try/catch is unsafe
 
 To handle errors (or exceptions), most languages have implemented the `try/catch` instruction, which is wacky in more ways than one.
 
@@ -189,7 +220,7 @@ We never write code like this in other situation. We never assume a value is equ
 
 Moreover, in some languages such as TypeScript, we can't even declare what kind of error we can throw, making the type safety in a `catch` block simply non-existent.
 
-#### Use the Result monad
+### Use the Result monad
 
 The Result monad is a generic type (but really a State under the hood) that will force you to handle errors by wrapping your return types.
 
@@ -271,7 +302,7 @@ divide(4, 2).filter(
 ) // "Result is not 1"
 ```
 
-#### Result and pattern matching
+### Result and pattern matching
 
 Result is a State, which means you can handle it with `match`.
 
@@ -282,15 +313,15 @@ match(divide(2, 2)).case({
 })
 ```
 
-### Optional value handling
+## Optional value handling
 
-#### Why: the Billion Dollar Mistake
+### Why: the Billion Dollar Mistake
 
 Of all languages, TypeScript is far from being the one with the worst `null` implementation.
 
 You will never get a `NullPointerException`, but it won't always make your code safer, as you're not forced to handle it explicitely in some situations.
 
-#### Use the Maybe monad
+### Use the Maybe monad
 
 The Maybe monad is a generic type (and a State under the hood) which can has 2 states: Some (with a value attached), and None (with no value attached).
 
@@ -342,7 +373,7 @@ divide(2, 0)
 divide(2, 2).toResult(() => 'Cannot divide by 0') // Result<string, number>
 ```
 
-#### Maybe and pattern matching
+### Maybe and pattern matching
 
 Maybe is a State, which means you can handle it with `match`.
 
@@ -353,9 +384,9 @@ match(divide(2, 2)).case({
 })
 ```
 
-### Handle loading
+## Handle loading
 
-#### Use the Loading monad
+### Use the Loading monad
 
 The Loading monad has 3 states: Pending, Failed, Done.
 
@@ -388,7 +419,7 @@ Let's use the Loading monad in a Svelte JS application:
 {/if}
 ```
 
-#### Loading and pattern matching
+### Loading and pattern matching
 
 Loading is a State, which means you can handle it with `match`.
 
@@ -402,17 +433,17 @@ match(loading).case({
 })
 ```
 
-### Procedural programming
+## Procedural programming
 
-#### Why: Organizing concurrent tasks is a pain
+### Why: Organizing concurrent tasks is a pain
 
-Sometimes you need to launch oncurrent processes.
+Sometimes you need to launch concurrent processes.
 Javascript and Typescript have a way for you to that: launching a bunch of Promises, putting them in
 an array, and finally executing `Promise.all()` on the array.
 
-This is not bad, but this is not an exceptionnal way of doing this either, as code will quickly become messy.
+This is not bad, but this is not an exceptionnal way of doing this either, as code will quickly get messy.
 
-#### Use Procedure
+### Use Procedure
 
 Instead, you can use Shulk's Procedure; which allows you to create a pipeline of Result returning Promises, using a nice builder pattern.
 
@@ -427,13 +458,13 @@ const myProcedure = await Procedure.start()
 	.end() // The procedure will be executed and return type Result<never, [string, number]>
 ```
 
-### Wrappers
+## Wrappers
 
 Shulk helps you make your code safer by providing useful tools and structures, but you'll probably have to use unsafe third-party libraries or legacy code at some point.
 
 To help you keep your code safe, Shulk provides wrappers that enable you to transform unsafe functions outputs into safe monads.
 
-#### resultify
+### resultify
 
 The `resultify` wrapper takes an unsafe function and return its output in a `Result`.
 
@@ -456,7 +487,7 @@ const safeJsonStringify = resultify<TypeError, typeof JSON.stringify>(
 const result: Result<TypeError, string> = safeJsonStringify({ foo: BigInt(1) })
 ```
 
-#### maybify
+### maybify
 
 The `maybify` wrapper takes a function that can return `undefined`, `null`, or `NaN`, and returns its output in a `Maybe`monad, with the `None` state representing `undefined`, `null`, or `NaN`.
 
