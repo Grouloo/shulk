@@ -79,12 +79,21 @@ interface ResultMethod<ErrType, OkType> {
 	): AsyncResult<E | ErrType, O>
 
 	/**
-	 * Returns a new Monad result in Ok state if the condition is verified
-	 * Returns a new Monad in Err state if not
+	 * Returns a new Monad result in Ok state if the condition is verified, and a new Monad in Err state otherwise
 	 * @param checker
 	 * @param otherwise
 	 */
-	filter<E, O extends OkType>(
+	filter<E>(
+		checker: (val: OkType) => boolean,
+		otherwise: (val: OkType) => E,
+	): Result<E | ErrType, OkType>
+
+	/**
+	 * Returns a new Monad result in Ok state if the condition is verified, and a new Monad in Err state otherwise
+	 * @param checker
+	 * @param otherwise
+	 */
+	filterType<E, O extends OkType>(
 		checker: (val: OkType) => val is O,
 		otherwise: (val: OkType) => E,
 	): Result<E | ErrType, O>
@@ -206,7 +215,25 @@ class ResultImpl<ErrType, OkType> implements ResultMethod<ErrType, OkType> {
 			})
 	}
 
-	filter<E, O extends OkType>(
+	filter<E>(
+		checker: (val: OkType) => boolean,
+		otherwise: (val: OkType) => E,
+	): Result<E | ErrType, OkType> {
+		return match(this as Result<ErrType, OkType>)
+			.returnType<Result<E | ErrType, OkType>>()
+			.case({
+				Err: (result) => Err(result.val),
+				Ok: ({ val }) => {
+					if (checker(val)) {
+						return Ok(val)
+					} else {
+						return Err(otherwise(val))
+					}
+				},
+			})
+	}
+
+	filterType<E, O extends OkType>(
 		checker: (val: OkType) => val is O,
 		otherwise: (val: OkType) => E,
 	): Result<E | ErrType, O> {

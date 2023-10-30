@@ -21,31 +21,31 @@ bun add shulk
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Pattern matching](#pattern-matching)
-  - [Why: Every execution path should be handled](#why-every-execution-path-should-be-handled)
-  - [Use match](#use-match)
-  - [Match numbers](#match-numbers)
-- [Polymorphism and state machines](#polymorphism-and-state-machines)
-  - [Why: OOP has a problem](#why-oop-has-a-problem)
-  - [Use states](#use-states)
-  - [You can match states!](#you-can-match-states)
-- [Error handling](#error-handling)
-  - [Why: try/catch is unsafe](#why-trycatch-is-unsafe)
-  - [Use the Result monad](#use-the-result-monad)
-  - [Result and pattern matching](#result-and-pattern-matching)
-- [Optional value handling](#optional-value-handling)
-  - [Why: the Billion Dollar Mistake](#why-the-billion-dollar-mistake)
-  - [Use the Maybe monad](#use-the-maybe-monad)
-  - [Maybe and pattern matching](#maybe-and-pattern-matching)
-- [Handle loading](#handle-loading)
-  - [Use the Loading monad](#use-the-loading-monad)
-  - [Loading and pattern matching](#loading-and-pattern-matching)
-- [Procedural programming](#procedural-programming)
-  - [Why: Organizing concurrent tasks is a pain](#why-organizing-concurrent-tasks-is-a-pain)
-  - [Use Procedure](#use-procedure)
-- [Wrappers](#wrappers)
-  - [resultify](#resultify)
-  - [maybify](#maybify)
+-  [Pattern matching](#pattern-matching)
+   -  [Why: Every execution path should be handled](#why-every-execution-path-should-be-handled)
+   -  [Use match](#use-match)
+   -  [Match numbers](#match-numbers)
+-  [Polymorphism and state machines](#polymorphism-and-state-machines)
+   -  [Why: OOP has a problem](#why-oop-has-a-problem)
+   -  [Use states](#use-states)
+   -  [You can match states!](#you-can-match-states)
+-  [Error handling](#error-handling)
+   -  [Why: try/catch is unsafe](#why-trycatch-is-unsafe)
+   -  [Use the Result monad](#use-the-result-monad)
+   -  [Result and pattern matching](#result-and-pattern-matching)
+-  [Optional value handling](#optional-value-handling)
+   -  [Why: the Billion Dollar Mistake](#why-the-billion-dollar-mistake)
+   -  [Use the Maybe monad](#use-the-maybe-monad)
+   -  [Maybe and pattern matching](#maybe-and-pattern-matching)
+-  [Handle loading](#handle-loading)
+   -  [Use the Loading monad](#use-the-loading-monad)
+   -  [Loading and pattern matching](#loading-and-pattern-matching)
+-  [Procedural programming](#procedural-programming)
+   -  [Why: Organizing concurrent tasks is a pain](#why-organizing-concurrent-tasks-is-a-pain)
+   -  [Use Procedure](#use-procedure)
+-  [Wrappers](#wrappers)
+   -  [resultify](#resultify)
+   -  [maybify](#maybify)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -293,10 +293,20 @@ divide(2, 0).flatMap((res) => Ok(res.toString())) // Promise
 
 // filter() evaluates a condition and returns a new Result
 divide(2, 2).filter(
-	(res): res is number => res == 1,
+	(res) => res == 1,
 	() => new Error('Result is not 1'),
 ) // 1
 divide(4, 2).filter(
+	(res) => res == 1,
+	() => 'Result is not 1',
+) // "Result is not 1"
+
+// filterType() evaluates a condition and returns a new Result wrapping the new type
+divide(2, 2).filterType(
+	(res): res is number => res == 1,
+	() => new Error('Result is not 1'),
+) // 1
+divide(4, 2).filterType(
 	(res): res is number => res == 1,
 	() => 'Result is not 1',
 ) // "Result is not 1"
@@ -504,3 +514,5 @@ const safeJsonStringify = maybify(JSON.stringify)
 // - a None state if there is nothing to return
 const maybe: Maybe<string> = safeJsonStringify({ foo: BigInt(1) })
 ```
+
+sgdhs
