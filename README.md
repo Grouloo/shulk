@@ -96,7 +96,7 @@ console.log(howManyDoIHave('dog')) // > 0
 console.log(howManyDoIHave('hamster')) // > 0
 ```
 
-Now, let's try to use functions:
+Now, let's try to execute lambdas, by using the `case` method:
 
 ```ts
 function makeSound(pet: Pet) {

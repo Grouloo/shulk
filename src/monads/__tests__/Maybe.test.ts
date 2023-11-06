@@ -1,4 +1,4 @@
-import { expect, it, describe } from 'bun:test'
+import { expect, test, describe } from 'bun:test'
 import { Maybe, None, Some } from '../Maybe'
 import match from '../../match/match'
 
@@ -11,70 +11,73 @@ function doSomething(returnSome: boolean): Maybe<string> {
 	return None()
 }
 
-it('should be Some state', () => {
-	expect(doSomething(true)._state).toBe('Some')
+test('Using Some() returns a Some state wrapping provided value', () => {
+	const maybe = Some('foo')
+
+	expect(maybe._state).toBe('Some')
+	expect(maybe.unwrapOr(false)).toBe('foo')
 })
 
-it('should be None state', () => {
-	expect(doSomething(false)._state).toBe('None')
+test('Using None() returns a None state', () => {
+	expect(None()._state).toBe('None')
 })
 
-describe('unwrap method tests', () => {
-	it('should unwrap Maybe', () => {
+describe('.unwrap()', () => {
+	test('unwraps the value when monad is in Some state', () => {
 		expect(doSomething(true).unwrap()).toBe(HERE_WE_GO)
 	})
 
-	it('should throw', () => {
+	test('throws when monad is in None state', () => {
 		expect(() => doSomething(false).unwrap()).toThrow()
 	})
 })
 
-describe('expect method tests', () => {
-	it('should unwrap Maybe', () => {
+describe('.expect()', () => {
+	test('unwraps the value when monad is in Some state', () => {
 		expect(doSomething(true).expect('found None')).toBe(HERE_WE_GO)
 	})
 
-	it('should throw', () => {
+	test('throws the provided message when monad is in None state', () => {
 		expect(() => doSomething(false).expect('found None')).toThrow(
 			'found None',
 		)
 	})
 })
 
-describe('unwrapOr method tests', () => {
-	it('should unwrap Maybe', () => {
+describe('.unwrapOr()', () => {
+	test('unwraps the value when monad is in Some state', () => {
 		expect(doSomething(true).unwrapOr('found None')).toBe(HERE_WE_GO)
 	})
 
-	it('should throw', () => {
+	test('returns the provided value instead when monad is in None state', () => {
 		expect(doSomething(false).unwrapOr('found None')).toBe('found None')
 	})
 })
 
-describe('map tests', () => {
-	it('should return a string', () => {
+describe('.map()', () => {
+	test('executes the provided handler when monad is in Some state', () => {
 		const mapped = doSomething(true).map((val) => val.toUpperCase())
 
 		expect(mapped._state).toBe('Some')
 		expect(mapped.unwrap()).toBe(HERE_WE_GO.toUpperCase())
 	})
 
-	it('should return None', () => {
+	test('does not execute the handler when monad is in None state', () => {
 		const mapped = doSomething(false).map((val) => val.toUpperCase())
 
 		expect(mapped._state).toBe('None')
 	})
 })
 
-describe('flatMap tests', () => {
-	it('should return a string', () => {
+describe('.flatMap()', () => {
+	test('returns the new monad when original monad is in Some state', () => {
 		const mapped = doSomething(true).flatMap((val) => Some(val.toUpperCase()))
 
 		expect(mapped._state).toBe('Some')
 		expect(mapped.unwrap()).toBe(HERE_WE_GO.toUpperCase())
 	})
 
-	it('should return None', () => {
+	test('does not execute the handler when the original monad is in None state', () => {
 		const mapped = doSomething(false).flatMap((val) =>
 			Some(val.toUpperCase()),
 		)
@@ -83,15 +86,15 @@ describe('flatMap tests', () => {
 	})
 })
 
-describe('toResult tests', () => {
-	it('should return an Ok Result', () => {
+describe('.toResult()', () => {
+	test('converts the monad to Result.Ok when it is in Some state', () => {
 		const mapped = doSomething(true).toResult(() => Error('Oh no'))
 
 		expect(mapped._state).toBe('Ok')
 		expect(mapped.val).toBe(HERE_WE_GO)
 	})
 
-	it('should return an Err Result', () => {
+	test('converts the monad to Result.Err, using provided value, when it is in None state', () => {
 		const mapped = doSomething(false).toResult(() => Error('Oh no'))
 
 		expect(mapped._state).toBe('Err')
@@ -107,11 +110,11 @@ describe('match Maybe tests', () => {
 		})
 	}
 
-	it('should return "here we go again"', () => {
+	test('should return "here we go again"', () => {
 		expect(matchMaybe(doSomething(true))).toBe(HERE_WE_GO.concat(' again'))
 	})
 
-	it('should return null', () => {
+	test('should return null', () => {
 		expect(matchMaybe(doSomething(false))).toBe(null)
 	})
 })

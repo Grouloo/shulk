@@ -1,4 +1,4 @@
-import { expect, it, describe } from 'bun:test'
+import { expect, test, describe } from 'bun:test'
 import { State, state } from '../State'
 
 const Television = state<{
@@ -7,36 +7,28 @@ const Television = state<{
 }>()
 type Television = State<typeof Television>
 
-function tvFactory(isOn: boolean) {
-	if (isOn) {
-		return Television.On({ currentChannel: 1 })
-	}
-
-	return Television.Off({})
-}
-
-describe('Instantiation tests', () => {
-	it('should instantiate a Television with On Struct', () => {
+describe('Instantiating Television will', () => {
+	test("return a Television['On'] type when calling Television.On", () => {
 		const tv = Television.On({ currentChannel: 12 })
 
 		expect(tv._state).toBe('On')
 		expect(tv.currentChannel).toBe(12)
 	})
 
-	it('should instantiate a Television with Off Struct', () => {
+	test("return a Television['Off'] type when calling Television.Off", () => {
 		const tv = Television.Off({})
 
 		expect(tv._state).toBe('Off')
 	})
 })
 
-describe('Single value states', () => {
+describe('Instantiating a single-value state will', () => {
 	const Billboard = state<{
 		Off: void
 		On: string
 	}>()
 
-	it('should instantiate On state', () => {
+	test("wrap the provided value in a 'val' property", () => {
 		const coca = Billboard.On('Coca-cola')
 
 		expect(coca.val).toBe('Coca-cola')
