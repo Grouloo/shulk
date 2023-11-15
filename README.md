@@ -514,5 +514,3 @@ const safeJsonStringify = maybify(JSON.stringify)
 // - a None state if there is nothing to return
 const maybe: Maybe<string> = safeJsonStringify({ foo: BigInt(1) })
 ```
-
-sgdhs
