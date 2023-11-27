@@ -1,3 +1,4 @@
+import match from '../match/match'
 import { Err, Ok, Result } from './Result'
 import { State, state } from './State'
 
@@ -36,6 +37,20 @@ export type Maybe<T> = Prettify<
 		 * @param handler
 		 */
 		flatMap<O>(handler: (val: T) => Maybe<O>): Maybe<O>
+
+		/**
+		 * Returns a new Maybe monad in Ok state if the condition is verified, and a new Monad in Err state otherwise
+		 * @param checker
+		 * @param otherwise
+		 */
+		filter(checker: (val: T) => boolean): Maybe<T>
+
+		/**
+		 * Returns a new Maybe monad in Ok state if the condition is verified, and a new Monad in Err state otherwise
+		 * @param checker
+		 * @param otherwise
+		 */
+		filterType<O extends T>(checker: (val: T) => val is O): Maybe<O>
 
 		/**
 		 * Returns a Result monad where the Ok state translates to the Some state
@@ -94,6 +109,36 @@ function createMaybe<T>(type: 'Some' | 'None', val?: T): Maybe<T> {
 			} else {
 				return Ok(self.val)
 			}
+		},
+
+		filter(checker: (val: T) => boolean): Maybe<T> {
+			return match(self)
+				.returnType<Maybe<T>>()
+				.case({
+					None: () => None(),
+					Some: ({ val }) => {
+						if (checker(val)) {
+							return Some(val)
+						} else {
+							return None()
+						}
+					},
+				})
+		},
+
+		filterType<O extends T>(checker: (val: T) => val is O): Maybe<O> {
+			return match(self)
+				.returnType<Maybe<O>>()
+				.case({
+					None: () => None(),
+					Some: ({ val }) => {
+						if (checker(val)) {
+							return Some(val)
+						} else {
+							return None()
+						}
+					},
+				})
 		},
 	}
 }
