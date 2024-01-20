@@ -1,10 +1,10 @@
-export type States = {
+export type Tags = {
 	[x: string]: any
 }
 
 type Prettify<T> = { [x in keyof T]: T[x] } & {}
 
-export type StatesRes<T extends States> = {
+export type TagUnion<T extends Tags> = {
 	[x in keyof T]: (
 		val: T[x],
 	) => T[x] extends object
@@ -14,11 +14,11 @@ export type StatesRes<T extends States> = {
 		: { readonly val: T[x]; readonly _state: x }
 }
 
-export type State<T extends { [x: string]: (val: any) => unknown }> = {
+export type InferUnion<T extends { [x: string]: (val: any) => unknown }> = {
 	[k in keyof T]: ReturnType<T[k]>
 } & { any: ReturnType<T[keyof T]> }
 
-export function state<T extends States>(): StatesRes<T> {
+export function union<T extends Tags>(): TagUnion<T> {
 	return new Proxy(
 		{},
 		{
@@ -32,5 +32,5 @@ export function state<T extends States>(): StatesRes<T> {
 				}
 			},
 		},
-	) as StatesRes<T>
+	) as TagUnion<T>
 }

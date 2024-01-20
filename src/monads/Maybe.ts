@@ -1,11 +1,11 @@
 import match from '../match/match'
 import { Err, Ok, Result } from './Result'
-import { State, state } from './State'
+import { InferUnion, union } from './Union'
 
 type Prettify<T> = { [x in keyof T]: T[x] } & {}
 
-const RawMaybe = state<{ None: {}; Some: { val: any } }>()
-type RawMaybe = State<typeof RawMaybe>
+const RawMaybe = union<{ None: {}; Some: { val: any } }>()
+type RawMaybe = InferUnion<typeof RawMaybe>
 
 export type Maybe<T> = Prettify<
 	({ _state: 'None' } | { val: T; _state: 'Some' }) & {

@@ -15,8 +15,8 @@ export { Loading, Pending, Failed, Done }
 import { Tuple, tuple } from './monads/Tuple'
 export { Tuple, tuple }
 
-import { state, State } from './monads/State'
-export { state, State }
+export { union, InferUnion } from './monads/Union'
+export { union as state, InferUnion as State } from './monads/Union'
 
 import { Procedure } from './procedure/Procedure'
 export { Procedure }

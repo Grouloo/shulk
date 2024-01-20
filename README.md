@@ -155,20 +155,20 @@ We could just write a getter that throws or return null if `this.isOn == false`,
 
 Shulk states allows you to make invalid states like this irrepresentable in the compiler, thus making your code safer.
 
-### Use states
+### Use unions
 
-States are unions of types representing immutable data, hugely inspired by Rust's enums.
+Unions are tagged unions of types representing immutable data, hugely inspired by Rust's enums.
 
-Let's rewrite our Television model with Shulk states:
+Let's rewrite our Television model with Shulk unions:
 
 ```ts
-import { state } from 'shulk'
+import { union } from 'shulk'
 
-const Television = state<{
+const Television = union<{
 	On: { currentChannel: number }
 	Off: {}
 }>()
-type Television = State<typeof Television>
+type Television = InferUnion<typeof Television>
 ```
 
 So, we just created a model with 2 states: the Television can be `On` and have a `currentChannel` property, or it can be `Off` and have no property.
@@ -193,9 +193,9 @@ const offTV: Television['Off'] = Television.Off({})
 console.log(offTV.currentChannel) // > error TS2339: Property 'currentChannel' does not exist on type '{ _state: "Off"}'
 ```
 
-### You can match states!
+### You can match unions!
 
-Guess what? You can evaluate states in a match expression, simply by using the name of each state. It will even infer the correct type when using the `case` method!
+Guess what? You can evaluate unions in a match expression, simply by using the tag of each variant. It will even infer the correct type when using the `case` method!
 
 ```ts
 match(myTV).with({

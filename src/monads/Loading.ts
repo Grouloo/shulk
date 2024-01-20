@@ -1,4 +1,4 @@
-import { state } from './State'
+import { union } from './Union'
 
 /**
  * The State monad is useful when working with reactive components, like in a ReactJS app
@@ -9,7 +9,7 @@ export type Loading<FailedType, DoneType> =
 	| { val: FailedType; _state: 'Failed' }
 	| { val: DoneType; _state: 'Done' }
 
-const Loading = state<{
+const Loading = union<{
 	Pending: { val: undefined }
 	Failed: { val: any }
 	Done: { val: any }

@@ -1,11 +1,11 @@
 import { expect, test, describe } from 'bun:test'
-import { State, state } from '../State'
+import { InferUnion, union } from '../Union'
 
-const Television = state<{
+const Television = union<{
 	On: { currentChannel: number }
 	Off: {}
 }>()
-type Television = State<typeof Television>
+type Television = InferUnion<typeof Television>
 
 describe('Instantiating Television will', () => {
 	test("return a Television['On'] type when calling Television.On", () => {
@@ -23,7 +23,7 @@ describe('Instantiating Television will', () => {
 })
 
 describe('Instantiating a single-value state will', () => {
-	const Billboard = state<{
+	const Billboard = union<{
 		Off: void
 		On: string
 	}>()
