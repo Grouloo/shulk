@@ -27,8 +27,8 @@ bun add shulk
    -  [Match numbers](#match-numbers)
 -  [Polymorphism and state machines](#polymorphism-and-state-machines)
    -  [Why: OOP has a problem](#why-oop-has-a-problem)
-   -  [Use states](#use-states)
-   -  [You can match states!](#you-can-match-states)
+   -  [Use unions](#use-unions)
+   -  [You can match states!](#you-can-match-unions)
 -  [Error handling](#error-handling)
    -  [Why: try/catch is unsafe](#why-trycatch-is-unsafe)
    -  [Use the Result monad](#use-the-result-monad)
@@ -153,7 +153,7 @@ There is a problem though: a Television that is currently off can't display anyt
 
 We could just write a getter that throws or return null if `this.isOn == false`, but either way it's kind of awkward, as it would only be a verification at runtime.
 
-Shulk states allows you to make invalid states like this irrepresentable in the compiler, thus making your code safer.
+Shulk unions allows you to make invalid states like this irrepresentable in the compiler, thus making your code safer.
 
 ### Use unions
 
@@ -220,9 +220,9 @@ We never write code like this in other situation. We never assume a value is equ
 
 Moreover, in some languages such as TypeScript, we can't even declare what kind of error we can throw, making the type safety in a `catch` block simply non-existent.
 
-### Use the Result monad
+### The solution: Use the Result monad
 
-The Result monad is a generic type (but really a State under the hood) that will force you to handle errors by wrapping your return types.
+The Result monad is a generic type (but really an union under the hood) that will force you to handle errors by wrapping your return types.
 
 ```ts
 type Result<ErrType, OkType>
@@ -312,9 +312,9 @@ divide(4, 2).filterType(
 ) // "Result is not 1"
 ```
 
-### Result and pattern matching
+#### Result and pattern matching
 
-Result is a State, which means you can handle it with `match`.
+Result is an union, which means you can handle it with `match`.
 
 ```ts
 match(divide(2, 2)).case({
@@ -327,13 +327,13 @@ match(divide(2, 2)).case({
 
 ### Why: the Billion Dollar Mistake
 
-Of all languages, TypeScript is far from being the one with the worst `null` implementation.
+Of all languages, TypeScript is far from being the one with the worst `null` implementation, even if it still is evaluated as an "object".
 
 You will never get a `NullPointerException`, but it won't always make your code safer, as you're not forced to handle it explicitely in some situations.
 
-### Use the Maybe monad
+### The solution: Use the Maybe monad
 
-The Maybe monad is a generic type (and a State under the hood) which can has 2 states: Some (with a value attached), and None (with no value attached).
+The Maybe monad is a generic type (and an union under the hood) which can has 2 states: Some (with a value attached), and None (with no value attached).
 
 Let's take our `divide` function from the previous sanction, but this time we will return no value when confronted to a division by 0:
 
@@ -343,8 +343,9 @@ import { Maybe, Some, None } from 'shulk'
 function divide(dividend: number, divisor: number): Maybe<number> {
 	if (divisor == 0) {
 		return None()
+	} else {
+		return Some(dividend / divisor)
 	}
-	return Some(dividend / divisor)
 }
 
 // We can then handle our Result in a few different ways
@@ -383,9 +384,9 @@ divide(2, 0)
 divide(2, 2).toResult(() => 'Cannot divide by 0') // Result<string, number>
 ```
 
-### Maybe and pattern matching
+#### Maybe and pattern matching
 
-Maybe is a State, which means you can handle it with `match`.
+Maybe is an union, which means you can handle it with `match`.
 
 ```ts
 match(divide(2, 2)).case({
@@ -431,7 +432,7 @@ Let's use the Loading monad in a Svelte JS application:
 
 ### Loading and pattern matching
 
-Loading is a State, which means you can handle it with `match`.
+Loading is a union, which means you can handle it with `match`.
 
 ```ts
 match(loading).case({

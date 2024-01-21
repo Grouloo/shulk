@@ -27,6 +27,7 @@
   },
   "type": "module",
   "dependencies": {
-    "marked": "^11.1.1"
+    "marked": "^11.1.1",
+    "shulk": "^0.13.0"
   }
 }

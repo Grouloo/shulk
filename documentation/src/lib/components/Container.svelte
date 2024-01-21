@@ -4,8 +4,10 @@
 
 <style>
 	main {
-		margin-left: 10%;
-		margin-right: 10%;
+		min-width: 70%;
 		max-width: 1200px;
+		text-wrap: wrap;
+		margin-left: auto;
+		margin-right: auto;
 	}
 </style>

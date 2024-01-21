@@ -14,7 +14,7 @@
 	</p>
 
 	<div class="centered">
-		<a class="btn btn-primary" href="/get-started">Get started</a>
+		<a class="btn btn-primary" href="/docs/get-started">Get started</a>
 		<a class="btn" href="https://github.com/Grouloo/shulk" target="_blank">See GitHub repo</a>
 	</div>
 </Container>

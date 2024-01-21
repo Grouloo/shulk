@@ -4,14 +4,14 @@
 
 <nav>
 	<div class="left">
+		<p>Shulk</p>
 		<a href="/" class={currentPage == '/' ? 'selected' : ''}>Home</a>
-		<a href="/get-started" class={currentPage == '/get-started' ? 'selected' : ''}>Get started</a>
-		<a href="/docs" class={currentPage == '/docs' ? 'selected' : ''}>Docs</a>
+		<a href="/docs/home" class={currentPage.includes('/docs') ? 'selected' : ''}>Docs</a>
 	</div>
 
 	<div class="right">
 		<a href="https://www.npmjs.com/package/shulk" target="_blank">NPM</a>
-		<a href="https://github.com/Grouloo/shulk" target="_blank">Github</a>
+		<a href="https://github.com/Grouloo/shulk" target="_blank">GitHub</a>
 	</div>
 </nav>
 
@@ -20,18 +20,41 @@
 		display: grid;
 		background-color: #2d3436;
 		margin: 0;
-		padding: 5px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+
+	nav p {
+		font-size: larger;
+		font-weight: bold;
+		color: white;
+		display: inline;
+		margin-left: 7px;
+		margin-right: 7px;
 	}
 
 	nav a {
+		font-size: larger;
 		color: #b2bec3;
 		text-decoration: none;
-		margin-left: 15px;
+		margin-top: 15px;
+		margin-bottom: 15px;
+		margin-left: 7px;
+		margin-right: 7px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		padding-left: 10px;
+		padding-right: 10px;
+		transition-duration: 0.25s;
 	}
 
 	nav a:hover,
 	.selected {
 		color: #dfe6e9;
+		background-color: #3f4345;
+		border-radius: 7px;
 	}
 
 	.left {
