@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Container from '../../components/Container.astro'
+
+export async function getStaticPaths() {
+  return [
+    { params: { slug: 'introduction' }, props: {title: 'Introduction'} },
+    { params: { slug: 'get-started' }, props: {title: 'Get started'} },
+    { params: { slug: 'tagged-unions' }, props: {title: 'Tagged unions'} },
+    { params: { slug: 'pattern-matching' }, props: {title: 'Pattern matching'} },
+    { params: { slug: 'result' }, props: {title: 'Result'} },
+    { params: { slug: 'Maybe' }, props: {title: 'maybe'} },
+    { params: { slug: 'loading' }, props: {title: 'Loading'} },
+  ];
+}
+
+const tableOfContent = [
+    {title: 'Shulk'},
+    {
+        title: 'Introduction',
+        slug: 'introduction'
+    },
+    {
+        title: 'Get started',
+        slug: 'get-started'
+    },
+    {title: 'Basics'},
+        {
+            title: 'Tagged unions',
+            slug: 'tagged-unions'
+        },
+        {
+            title: 'Pattern matching',
+            slug: 'pattern-matching'
+        }
+    ,
+    {title: 'Monads'},
+        {
+            title: 'Result',
+            slug: 'result'
+        },
+        {
+            title: 'Maybe',
+            slug: 'maybe'
+        },
+        {
+            title: 'Loading',
+            slug: 'loading'
+        }
+];
+    
+const pathname = Astro.url.pathname
+
+const { slug } = Astro.params
+
+const { title } = Astro.props
+---
+
+<BaseLayout title={title}>
+	<div class="grid">
+		<div class="left">
+			{tableOfContent.map((link) => ( link.slug ?
+                <a 
+                    href={'/docs/' + link.slug} 
+                    class={link.title === pathname ? 'selected' : ''}
+                >
+                    {link.title}
+                </a> : <p>{link.title}</p>
+             ))}
+		</div>
+
+		<div class="right">
+			<article hx-get={"/articles/" + slug} hx-trigger="load"></article>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.grid {
+		display: grid;
+	}
+
+	.left {
+		min-height: 100vh;
+		max-height: 100%;
+		width: 150px;
+		grid-column: 1;
+		grid-row: 1;
+		background-color: #e5e5e5;
+		padding-left: 5px;
+	}
+
+	.right {
+		grid-column: 2;
+		grid-row: 1;
+		padding-left: 15px;
+        padding-right: 15px;
+	}
+
+	.left p {
+		text-transform: uppercase;
+		font-weight: bold;
+		margin-bottom: 1px;
+	}
+
+	.left a {
+		display: block;
+		color: #868686;
+		text-decoration: none;
+	}
+
+	.left a:hover {
+		color: #303030;
+	}
+
+	.selected {
+		color: #303030;
+	}
+</style>
+

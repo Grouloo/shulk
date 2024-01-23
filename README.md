@@ -28,7 +28,7 @@ bun add shulk
 -  [Polymorphism and state machines](#polymorphism-and-state-machines)
    -  [Why: OOP has a problem](#why-oop-has-a-problem)
    -  [Use unions](#use-unions)
-   -  [You can match states!](#you-can-match-unions)
+   -  [You can match unions!](#you-can-match-unions)
 -  [Error handling](#error-handling)
    -  [Why: try/catch is unsafe](#why-trycatch-is-unsafe)
    -  [Use the Result monad](#use-the-result-monad)
