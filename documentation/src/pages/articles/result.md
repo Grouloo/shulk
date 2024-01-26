@@ -20,13 +20,13 @@ type Result<ErrType, OkType>
 Let's make a function that divides 2 number and can return an error:
 
 ```ts
-import { Result, Ok, Err } from 'shulk';
+import { Result, Ok, Err } from "shulk";
 
 function divide(dividend: number, divisor: number): Result<string, number> {
-	if (divisor == 0) {
-		return Err('Cannot divide by 0!');
-	}
-	return Ok(dividend / divisor);
+  if (divisor == 0) {
+    return Err("Cannot divide by 0!");
+  }
+  return Ok(dividend / divisor);
 }
 
 // We can then handle our Result in a few different ways
@@ -37,13 +37,13 @@ divide(2, 0).unwrap(); // Uncaught Cannot divide by 0!
 
 // expect() throws a custom message when it encounters an error state
 // Like unwrap(), you shoudn't use it in a production context
-divide(2, 2).expect('Too bad!'); // 1
-divide(2, 0).expect('Too bad!'); // Uncaught Too bad!
+divide(2, 2).expect("Too bad!"); // 1
+divide(2, 0).expect("Too bad!"); // Uncaught Too bad!
 
 // unwrapOr() will return the provided default value when encountering an error state
 // It is safe to use in a production context, as the program cannot crash
-divide(2, 2).unwrapOr('Not a number'); // 1
-divide(2, 0).unwrapOr('Not a number'); // "Not a number"
+divide(2, 2).unwrapOr("Not a number"); // 1
+divide(2, 0).unwrapOr("Not a number"); // "Not a number"
 
 // isOk() will return true if the Result has an Ok state
 // When true, the compiler will infer that val has an OkType
@@ -62,19 +62,19 @@ divide(2, 0).val; // "Cannot divide by 0!"
 
 // map() takes a function as an argument and return its value wrapped in an Ok state, or an Err state
 divide(2, 2)
-	.map((res) => res.toString())
-	.unwrap(); // "1"
+  .map((res) => res.toString())
+  .unwrap(); // "1"
 divide(2, 0)
-	.map((res) => res.toString())
-	.unwrap(); // Uncaught Cannot divide by 0!
+  .map((res) => res.toString())
+  .unwrap(); // Uncaught Cannot divide by 0!
 
 // flatMap() takes a function that returns a Result, and return its value
 divide(2, 2)
-	.flatMap((res) => Ok(res.toString()))
-	.unwrap(); // "1"
+  .flatMap((res) => Ok(res.toString()))
+  .unwrap(); // "1"
 divide(2, 0)
-	.flatMap((res) => Ok(res.toString()))
-	.unwrap(); // Uncaught Cannot divide by 0!
+  .flatMap((res) => Ok(res.toString()))
+  .unwrap(); // Uncaught Cannot divide by 0!
 
 // flatMapAsync() takes a function that returns a Result, and return its value in a Promise
 divide(2, 2).flatMap((res) => Ok(res.toString())); // Promise
@@ -82,32 +82,32 @@ divide(2, 0).flatMap((res) => Ok(res.toString())); // Promise
 
 // filter() evaluates a condition and returns a new Result
 divide(2, 2).filter(
-	(res) => res == 1,
-	() => new Error('Result is not 1')
+  (res) => res == 1,
+  () => new Error("Result is not 1"),
 ); // 1
 divide(4, 2).filter(
-	(res) => res == 1,
-	() => 'Result is not 1'
+  (res) => res == 1,
+  () => "Result is not 1",
 ); // "Result is not 1"
 
 // filterType() evaluates a condition and returns a new Result wrapping the new type
 divide(2, 2).filterType(
-	(res): res is number => res == 1,
-	() => new Error('Result is not 1')
+  (res): res is number => res == 1,
+  () => new Error("Result is not 1"),
 ); // 1
 divide(4, 2).filterType(
-	(res): res is number => res == 1,
-	() => 'Result is not 1'
+  (res): res is number => res == 1,
+  () => "Result is not 1",
 ); // "Result is not 1"
 ```
 
 ### Result and pattern matching
 
-Result is a State, which means you can handle it with `match`.
+Result is an union, which means you can handle it with `match`.
 
 ```ts
 match(divide(2, 2)).case({
-	Err: () => console.log('Could not compute result'),
-	Ok: ({ val }) => console.log('Result is ', val)
+  Err: () => console.log("Could not compute result"),
+  Ok: ({ val }) => console.log("Result is ", val),
 });
 ```

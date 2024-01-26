@@ -3,56 +3,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 
 export async function getStaticPaths() {
   return [
-    { params: { slug: 'introduction' }, props: {title: 'Introduction'} },
-    { params: { slug: 'get-started' }, props: {title: 'Get started'} },
-    { params: { slug: 'tagged-unions' }, props: {title: 'Tagged unions'} },
-    { params: { slug: 'pattern-matching' }, props: {title: 'Pattern matching'} },
-    { params: { slug: 'result' }, props: {title: 'Result'} },
-    { params: { slug: 'maybe' }, props: {title: 'maybe'} },
-    { params: { slug: 'loading' }, props: {title: 'Loading'} },
-    { params: { slug: 'procedural-programming' }, props: {title: 'Procedural programming'} },
+    { params: { slug: 'examples' }, props: {title: 'Examples'} },
+    { params: { slug: 'if-vs-match' }, props: {title: 'If vs match'} },
+    { params: { slug: 'oop-vs-union' }, props: {title: 'OOP vs tagged unions'} },
   ];
 }
 
 const tableOfContent = [
-    {title: 'Shulk'},
+    {title: 'Examples'},
     {
-        title: 'Introduction',
-        slug: 'introduction'
+        title: 'If vs match',
+        slug: 'if-vs-match'
     },
     {
-        title: 'Get started',
-        slug: 'get-started'
+        title: 'OOP vs tagged unions',
+        slug: 'oop-vs-union'
     },
-    {title: 'Basics'},
-    {
-        title: 'Tagged unions',
-        slug: 'tagged-unions'
-    },
-    {
-        title: 'Pattern matching',
-        slug: 'pattern-matching'
-    },
-    {title: 'Monads'},
-    {
-        title: 'Result',
-        slug: 'result'
-    },
-    {
-        title: 'Maybe',
-        slug: 'maybe'
-    },
-    {
-        title: 'Loading',
-        slug: 'loading'
-    },
-    {
-        title: 'Others'
-    },
-    {
-        title: 'Procedural programming',
-        slug: 'procedural-programming'
-    }
 ];
 
    
@@ -70,8 +36,8 @@ const { title } = Astro.props
 		<div class="left">
 			{tableOfContent.map((link) => ( link.slug ?
                 <a 
-                    href={'/docs/' + link.slug} 
-                    class={'/docs/' + link.slug === pathname ? 'selected' : ''}
+                    href={'/examples/' + link.slug} 
+                    class={'/examples/' + link.slug === pathname ? 'selected' : ''}
                 >
                     {link.title}
                 </a> : <p>{link.title}</p>
