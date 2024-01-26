@@ -10,6 +10,7 @@ export async function getStaticPaths() {
     { params: { slug: 'result' }, props: {title: 'Result'} },
     { params: { slug: 'maybe' }, props: {title: 'maybe'} },
     { params: { slug: 'loading' }, props: {title: 'Loading'} },
+    { params: { slug: 'wrappers' }, props: { title: 'Wrappers' } },
     { params: { slug: 'procedural-programming' }, props: {title: 'Procedural programming'} },
   ];
 }
@@ -48,6 +49,10 @@ const tableOfContent = [
     },
     {
         title: 'Others'
+    },
+    {
+        title: 'Wrappers',
+        slug: 'wrappers',
     },
     {
         title: 'Procedural programming',
