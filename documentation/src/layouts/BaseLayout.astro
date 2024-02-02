@@ -1,4 +1,5 @@
 ---
+import Footer from '@components/Footer.astro'
 import Navbar from '@components/Navbar.astro'
 
 interface Props {
@@ -22,6 +23,7 @@ const currentPath = Astro.url.pathname
 	<body>
         <Navbar currentPage={currentPath}/>
 		<slot />
+		<Footer />
 	</body>
 </html>
 

@@ -1,11 +1,13 @@
 ---
+import Container from '@components/Container.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import ContentWithNav from '@components/ContentWithNav.astro';
 
 export async function getStaticPaths() {
   return [
     { params: { slug: 'examples' }, props: {title: 'Examples'} },
     { params: { slug: 'if-vs-match' }, props: {title: 'If vs match'} },
-    { params: { slug: 'oop-vs-union' }, props: {title: 'OOP vs tagged unions'} },
+    { params: { slug: 'classes-vs-union' }, props: {title: 'Classes vs tagged unions'} },
   ];
 }
 
@@ -16,8 +18,8 @@ const tableOfContent = [
         slug: 'if-vs-match'
     },
     {
-        title: 'OOP vs tagged unions',
-        slug: 'oop-vs-union'
+        title: 'Classes vs unions',
+        slug: 'classes-vs-union'
     },
 ];
 
@@ -32,73 +34,11 @@ const { title } = Astro.props
 ---
 
 <BaseLayout title={title}>
-	<div class="grid" hx-boost="true">
-		<div class="left">
-			{tableOfContent.map((link) => ( link.slug ?
-                <a 
-                    href={'/examples/' + link.slug} 
-                    class={'/examples/' + link.slug === pathname ? 'selected' : ''}
-                >
-                    {link.title}
-                </a> : <p>{link.title}</p>
-             ))}
-		</div>
-
-		<div class="right">
-			<article hx-get={"/articles/" + slug} hx-trigger="load"></article>
-		</div>
-	</div>
+    <Container>
+        <ContentWithNav 
+            tableOfContent={tableOfContent} 
+            selected={slug} 
+            hx-get={'/articles/' + slug} 
+        />
+    </Container>
 </BaseLayout>
-
-<style>
-    h1 {
-        font-size: 2em;
-        color: 'red';
-    }
-
-	.grid {
-		display: grid;
-        width: 100%;
-	}
-
-	.left {
-		min-height: 100vh;
-		max-height: 100%;
-		width: 180px;
-		grid-column: 1;
-		grid-row: 1;
-		background-color: #e5e5e5;
-		padding-left: 5px;
-	}
-
-	.right {
-        width: calc(100% - 200px);
-        max-width: 933px;
-        padding-left: 15px;
-        word-wrap: break-word;
-		grid-column: 2;
-		grid-row: 1;
-	}
-
-	.left p {
-		text-transform: uppercase;
-		font-weight: bold;
-		margin-bottom: 1px;
-	}
-
-	.left a {
-		display: block;
-		color: #868686;
-		text-decoration: none;
-	}
-
-	.left a:hover {
-		color: #303030;
-	}
-
-	.selected {
-		color: #303030!important;
-        font-weight: bold;
-	}
-</style>
-

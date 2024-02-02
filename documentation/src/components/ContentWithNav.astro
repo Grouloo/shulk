@@ -1,0 +1,115 @@
+---
+import Segment from '@components/Segment.astro';
+
+interface Props {
+    'hx-get': string
+    tableOfContent: ({slug?: string; title: string})[]
+    selected: string
+}
+
+const { tableOfContent, selected } = Astro.props
+
+---
+
+<div class="grid" hx-boost="true">
+    <div class="left">
+        <Segment>
+            {tableOfContent.map((link) => ( link.slug ?
+                <a 
+                    href={link.slug} 
+                    class={link.slug === selected ? 'selected' : ''}
+                >
+                    {link.title}
+                </a> : <p>{link.title}</p>
+            ))}
+        </Segment>
+        
+    </div>
+
+
+    <div class="right">
+        <div class="container" hx-get={Astro.props['hx-get']} hx-trigger="load">
+            <span class="loader"></span>
+        </div>
+        
+    </div>
+        </div>
+	
+
+<style>
+	.grid {
+        max-width: 1300px;
+		display: grid;
+        column-gap: 10px;
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+	.left {
+		height: 100%;
+		width: 180px;
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+    .left p {
+		text-transform: uppercase;
+		font-weight: bold;
+		margin-bottom: 1px;
+	}
+
+	.left a {
+		display: block;
+        width: 100%;
+		color: #868686;
+		text-decoration: none;
+        /* border: solid 0.1px #5f5e5e; */
+        border-radius: 5px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-left: 1px;
+        padding-right: 1px;
+        margin-bottom: 5px;
+    }
+
+	.left a:hover {
+        background-color: #ececec;
+		color: #303030;
+	}
+
+	.selected {
+        background-color: #ececec;
+		color: #303030!important;
+        font-weight: bold;
+	}
+	.right {
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-bottom: 70px;
+        overflow: hidden;
+		grid-column: 2;
+		grid-row: 1;
+    }
+
+    .loader {
+        width: 48px;
+        height: 48px;
+        border: 5px solid #222121;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    } 
+</style>
+

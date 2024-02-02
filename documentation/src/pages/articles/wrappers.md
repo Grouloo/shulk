@@ -1,3 +1,7 @@
+---
+layout: ../../components/Segment.astro
+---
+
 # Wrappers
 
 Shulk helps you to make your code safer by providing useful tools and structures, but you'll probably have to use unsafe third-party libraries or legacy code at some point.

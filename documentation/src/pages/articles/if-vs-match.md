@@ -1,4 +1,12 @@
+---
+layout: ../../components/Segment.astro
+---
+
 # If vs match
+
+Conditions are essential in programming, but sometimes if/else get a little bit difficult to read.
+
+Shulk's match function allows to write more declarative code when handling multiple execution routes.
 
 Let's make a function that takes an UV index (0..+11) and returns a string representing a risk.
 

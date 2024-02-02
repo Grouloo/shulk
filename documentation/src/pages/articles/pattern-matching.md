@@ -1,3 +1,7 @@
+---
+layout: ../../components/Segment.astro
+---
+
 # Pattern matching
 
 ## Why: Every execution path should be handled
@@ -15,15 +19,15 @@ When using `match`, the compiler will force you to be exhaustive, reducing chanc
 Let's take a look at a simple example:
 
 ```ts
-import { match } from 'shulk';
+import { match } from "shulk";
 
-type Pet = 'cat' | 'dog' | 'hamster';
-let pet: Pet = 'cat';
+type Pet = "cat" | "dog" | "hamster";
+let pet: Pet = "cat";
 
 const toy = match(pet).with({
-	cat: 'plastic mouse',
-	dog: 'bone',
-	hamster: 'wheel'
+  cat: "plastic mouse",
+  dog: "bone",
+  hamster: "wheel",
 });
 console.log(toy); // > "plastic mouse"
 ```
@@ -34,31 +38,31 @@ Every value must be handled one way or another, but you can use `_otherwise` to 
 
 ```ts
 function howManyDoIHave(pet: Pet) {
-	return match(pet).with({
-		cat: 3,
-		_otherwise: 0
-	});
+  return match(pet).with({
+    cat: 3,
+    _otherwise: 0,
+  });
 }
 
-console.log(howManyDoIHave('cat')); // > 3
-console.log(howManyDoIHave('dog')); // > 0
-console.log(howManyDoIHave('hamster')); // > 0
+console.log(howManyDoIHave("cat")); // > 3
+console.log(howManyDoIHave("dog")); // > 0
+console.log(howManyDoIHave("hamster")); // > 0
 ```
 
 Now, let's try to execute lambdas, by using the `case` method:
 
 ```ts
 function makeSound(pet: Pet) {
-	return match(pet)
-		.returnType<void>()
-		.case({
-			cat: (val) => console.log(`${val}: meow`),
-			dog: () => console.log(`${val}: bark`),
-			hamster: () => console.log(`${val}: squeak`)
-		});
+  return match(pet)
+    .returnType<void>()
+    .case({
+      cat: (val) => console.log(`${val}: meow`),
+      dog: () => console.log(`${val}: bark`),
+      hamster: () => console.log(`${val}: squeak`),
+    });
 }
 
-console.log(makeSound('cat')); // > "cat: meow"
+console.log(makeSound("cat")); // > "cat: meow"
 ```
 
 ### Match numbers
@@ -74,14 +78,14 @@ When matching numbers, you can create a case for a specific number, but you can 
 // - 'Evening' when hour is between 18 and 23
 // - 'Not a valid hour' if hour didn't match any case
 function hourToPeriod(hour: number) {
-	return match(hour).with({
-		'0..4': 'Night',
-		'5..11': 'Morning',
-		12: 'Noon',
-		'13..18': 'Afternoon',
-		'18..23': 'Evening',
-		_otherwise: 'Not a valid hour'
-	});
+  return match(hour).with({
+    "0..4": "Night",
+    "5..11": "Morning",
+    12: "Noon",
+    "13..18": "Afternoon",
+    "18..23": "Evening",
+    _otherwise: "Not a valid hour",
+  });
 }
 ```
 
@@ -91,18 +95,18 @@ You can evaluate unions in a match expression, simply by using the tag of each v
 
 ```ts
 const TV = union<{
-	On: { currentChannel: boolean };
-	Off: {};
+  On: { currentChannel: boolean };
+  Off: {};
 }>();
 type TV = InferUnion<typeof TV>;
 
 match(myTV).with({
-	On: 'TV is on!',
-	Off: 'TV is off!'
+  On: "TV is on!",
+  Off: "TV is off!",
 });
 
 match(myTV).case({
-	On: (tv: Television['On']) => 'TV is on!',
-	Off: (tv: Television['Off']) => 'TV is off!'
+  On: (tv: Television["On"]) => "TV is on!",
+  Off: (tv: Television["Off"]) => "TV is off!",
 });
 ```

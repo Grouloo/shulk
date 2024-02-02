@@ -1,4 +1,8 @@
-# Error handling
+---
+layout: ../../components/Segment.astro
+---
+
+# The Result monad for error handling
 
 ## Why: try/catch is unsafe
 

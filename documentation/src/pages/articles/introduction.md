@@ -1,3 +1,7 @@
+---
+layout: ../../components/Segment.astro
+---
+
 # Introduction
 
 Programming languages are complicated.

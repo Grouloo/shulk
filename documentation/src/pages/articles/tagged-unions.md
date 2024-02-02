@@ -1,3 +1,7 @@
+---
+layout: ../../components/Segment.astro
+---
+
 # Tagged unions
 
 ## Why: OOP has a problem
@@ -6,8 +10,8 @@ Let's try to model a Television using classic OOP. We want to know if the Televi
 
 ```ts
 class Television {
-	isOn: boolean;
-	currentChannel: number;
+  isOn: boolean;
+  currentChannel: number;
 }
 ```
 
@@ -24,11 +28,11 @@ Unions are tagged unions of types representing immutable data, hugely inspired b
 Let's rewrite our Television model with Shulk unions:
 
 ```ts
-import { union } from 'shulk';
+import { union } from "shulk";
 
 const Television = union<{
-	On: { currentChannel: number };
-	Off: {};
+  On: { currentChannel: number };
+  Off: {};
 }>();
 type Television = InferUnion<typeof Television>;
 ```
@@ -39,18 +43,18 @@ The Television type we declared here can be transcribed to:
 
 ```ts
 type Television = {
-	On: { currentChannel: number; _state: 'On' };
-	Off: { _state: 'Off' };
-	any: { currentChannel: number; _state: 'On' } | { _state: 'Off' };
+  On: { currentChannel: number; _state: "On" };
+  Off: { _state: "Off" };
+  any: { currentChannel: number; _state: "On" } | { _state: "Off" };
 };
 ```
 
 Let's use our Television:
 
 ```ts
-const onTV: Television['On'] = Television.On({ currentChannel: 12 });
+const onTV: Television["On"] = Television.On({ currentChannel: 12 });
 console.log(onTV.currentChannel); // > 12
 
-const offTV: Television['Off'] = Television.Off({});
+const offTV: Television["Off"] = Television.Off({});
 console.log(offTV.currentChannel); // > error TS2339: Property 'currentChannel' does not exist on type '{ _state: "Off"}'
 ```

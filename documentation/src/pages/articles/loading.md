@@ -1,4 +1,8 @@
-# Handle loading
+---
+layout: ../../components/Segment.astro
+---
+
+# The Loading monad
 
 ## Use the Loading monad
 
@@ -39,10 +43,10 @@ Loading is a State, which means you can handle it with `match`.
 
 ```ts
 match(loading).case({
-	Pending: () => console.log('Now loading....'),
-	Done: ({ val }) => console.log('Result is ', val),
-	Failed: ({ val }) => {
-		throw val;
-	}
+  Pending: () => console.log("Now loading...."),
+  Done: ({ val }) => console.log("Result is ", val),
+  Failed: ({ val }) => {
+    throw val;
+  },
 });
 ```

@@ -1,4 +1,8 @@
-# Optional value handling
+---
+layout: ../../components/Segment.astro
+---
+
+# The Maybe monad for optional value handling
 
 ## Why: the Billion Dollar Mistake
 

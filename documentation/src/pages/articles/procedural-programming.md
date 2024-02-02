@@ -1,3 +1,7 @@
+---
+layout: ../../components/Segment.astro
+---
+
 # Procedural programming
 
 ## Why: Organizing concurrent tasks is a pain

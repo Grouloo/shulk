@@ -1,4 +1,24 @@
-# OOP vs tagged union
+---
+layout: ../../components/Segment.astro
+---
+
+# Classes vs unions
+
+Nowadays, Object Oriented Programming means using classes with a lot of setters and getters and mutations and calling it a day.
+
+This is a sham, true OOP is not like that.
+
+True OOP is about encapsulation and interactions, and behavior.
+
+You don't need to choose between object oriented programming and functionnal programming because it is a false dichotomy. You can do both, and you should do both.
+
+Classes are sometimes useful, but let's face it, they often allow terrible code to be written.
+
+OOP is easy to fail because writing classes is easy to fail. So instead, let's use a more suited tool for the job. It is as simple as that.
+
+Be a pragmatic developer, not a dogmatic one.
+
+You can modelize your domain without classes, by using Shulk's tagged unions: allowing you to deal with polymorphic and immutable data structures.
 
 Let's create a Mario state machine and implement how he changes when he collides with a monster!
 
