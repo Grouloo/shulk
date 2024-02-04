@@ -41,7 +41,7 @@ const { currentPage } = Astro.props
 		margin-right: 7px;
 	}
 
-	nav a {
+	.left a {
 		font-size: larger;
 		color: #b2bec3;
 		text-decoration: none;
@@ -56,9 +56,9 @@ const { currentPage } = Astro.props
 		transition-duration: 0.25s;
 	}
 
-	nav a:hover,
+	.left a:hover,
 	.selected {
-		color: #dfe6e9;
+		color: #dfe6e9!important;
 		background-color: #3f4345;
 		border-radius: 7px;
 	}
@@ -72,5 +72,25 @@ const { currentPage } = Astro.props
 		grid-column: 2;
 		grid-row: 1;
 		text-align: right;
+	}
+
+	.right a {
+		font-size: larger;
+		color: #b2bec3;
+		text-decoration: none;
+		margin-top: 15px;
+		margin-bottom: 15px;
+		margin-left: 7px;
+		margin-right: 7px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		padding-left: 10px;
+		padding-right: 10px;
+		transition-duration: 0.25s;
+	}
+
+	.right a:hover {
+		color: #dfe6e9!important;
+		border-radius: 7px;
 	}
 </style>
