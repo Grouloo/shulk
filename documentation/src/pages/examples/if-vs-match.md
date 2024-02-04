@@ -1,5 +1,5 @@
 ---
-layout: ../../components/Segment.astro
+layout: ../../layouts/ExampleLayout.astro
 ---
 
 # If vs match

@@ -101,6 +101,13 @@ interface ResultMethod<ErrType, OkType> {
 
 type OkState<OkType> = { val: OkType; _state: 'Ok' }
 type ErrState<ErrType> = { val: ErrType; _state: 'Err' }
+
+/**
+ * The result monad allows you to declare errors and values
+ * that can be returned by a function
+ * and provides useful methods to handle them.
+ * {@link} https://shulk.org/docs/result
+ */
 export type Result<ErrType, OkType> = Prettify<
 	(ErrState<ErrType> | OkState<OkType>) & ResultMethod<ErrType, OkType>
 >

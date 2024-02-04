@@ -1,5 +1,5 @@
 ---
-layout: ../../components/Segment.astro
+layout: ../../layouts/DocLayout.astro
 ---
 
 # Procedural programming

@@ -2,7 +2,6 @@
 import Segment from '@components/Segment.astro';
 
 interface Props {
-    'hx-get': string
     tableOfContent: ({slug?: string; title: string})[]
     selected: string
 }
@@ -28,12 +27,11 @@ const { tableOfContent, selected } = Astro.props
 
 
     <div class="right">
-        <div class="container" hx-get={Astro.props['hx-get']} hx-trigger="load">
-            <span class="loader"></span>
-        </div>
-        
+       <Segment>
+            <slot />
+       </Segment>
     </div>
-        </div>
+</div>
 	
 
 <style>
@@ -70,7 +68,7 @@ const { tableOfContent, selected } = Astro.props
         padding-bottom: 2px;
         padding-left: 1px;
         padding-right: 1px;
-        margin-bottom: 5px;
+       /* margin-bottom: 5px; */
     }
 
 	.left a:hover {

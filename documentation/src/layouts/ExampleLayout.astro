@@ -1,18 +1,11 @@
 ---
 import Container from '@components/Container.astro';
-import BaseLayout from '../../layouts/BaseLayout.astro'
+import BaseLayout from './BaseLayout.astro'
 import ContentWithNav from '@components/ContentWithNav.astro';
 
-export async function getStaticPaths() {
-  return [
-    { params: { slug: 'examples' }, props: {title: 'Examples'} },
-    { params: { slug: 'if-vs-match' }, props: {title: 'If vs match'} },
-    { params: { slug: 'classes-vs-union' }, props: {title: 'Classes vs tagged unions'} },
-  ];
-}
 
 const tableOfContent = [
-    {title: 'Examples'},
+    { title: 'Table of content' },
     {
         title: 'If vs match',
         slug: 'if-vs-match'
@@ -21,14 +14,15 @@ const tableOfContent = [
         title: 'Classes vs unions',
         slug: 'classes-vs-union'
     },
+    {
+        title: 'Domain modeling',
+        slug: 'domain-modeling'
+    },
 ];
 
-   
 const pathname = Astro.url.pathname
 
-console.log(pathname)
-
-const { slug } = Astro.params
+const [,,slug] = pathname.split('/')
 
 const { title } = Astro.props
 ---
@@ -37,8 +31,9 @@ const { title } = Astro.props
     <Container>
         <ContentWithNav 
             tableOfContent={tableOfContent} 
-            selected={slug} 
-            hx-get={'/articles/' + slug} 
-        />
+            selected={slug as string} 
+        >
+            <slot />
+        </ContentWithNav>
     </Container>
 </BaseLayout>

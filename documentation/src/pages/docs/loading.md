@@ -1,5 +1,5 @@
 ---
-layout: ../../components/Segment.astro
+layout: ../../layouts/DocLayout.astro
 ---
 
 # The Loading monad
@@ -16,15 +16,10 @@ Let's use the Loading monad in a Svelte JS application:
 
     let loading: Loading<Error, string> = Pending()
 
-	function OnMount() {
+	async function onMount() {
 		const res: Result<Error, string> = await doSomething()
 
-		loading = match(res)
-			.returnType<Loading<Error, string>>()
-			.case({
-				Err: ({ val }) => Failed(val),
-				Ok: ({ val }) => Done(val)
-			})
+		loading = res.toLoading()
 	}
 </script>
 

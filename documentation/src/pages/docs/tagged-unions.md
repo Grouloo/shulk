@@ -1,5 +1,5 @@
 ---
-layout: ../../components/Segment.astro
+layout: ../../layouts/DocLayout.astro
 ---
 
 # Tagged unions
@@ -28,7 +28,7 @@ Unions are tagged unions of types representing immutable data, hugely inspired b
 Let's rewrite our Television model with Shulk unions:
 
 ```ts
-import { union } from "shulk";
+import { union, InferUnion } from "shulk";
 
 const Television = union<{
   On: { currentChannel: number };

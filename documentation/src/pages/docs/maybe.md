@@ -1,5 +1,5 @@
 ---
-layout: ../../components/Segment.astro
+layout: ../../layouts/DocLayout.astro
 ---
 
 # The Maybe monad for optional value handling
