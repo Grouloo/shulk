@@ -21,6 +21,8 @@ export { union as state, InferUnion as State } from './monads/Union'
 import { Procedure } from './procedure/Procedure'
 export { Procedure }
 
+export { Concurrently } from './procedure/Concurrently'
+
 import { resultify, asyncResultify } from './wrappers/resultify'
 export { resultify, asyncResultify }
 
