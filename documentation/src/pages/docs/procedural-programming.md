@@ -1,8 +1,7 @@
 ---
+title: Procedural programming
 layout: ../../layouts/DocLayout.astro
 ---
-
-# Procedural programming
 
 ## Why: Organizing concurrent tasks is a pain
 

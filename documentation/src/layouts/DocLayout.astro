@@ -52,15 +52,16 @@ const tableOfContent = [
 const pathname = Astro.url.pathname
 
 const [,,slug] = pathname.split('/')
-
-const { title } = Astro.props
+ 
+const { frontmatter } = Astro.props;
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={frontmatter.title + '- Shulk'}>
     <Container>
         <ContentWithNav     
             tableOfContent={tableOfContent}
             selected={slug as string}
+            title={frontmatter.title}
         >
             <slot />
         </ContentWithNav>

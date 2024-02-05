@@ -1,8 +1,7 @@
 ---
+title: Pattern matching
 layout: ../../layouts/DocLayout.astro
 ---
-
-# Pattern matching
 
 ## Why: Every execution path should be handled
 

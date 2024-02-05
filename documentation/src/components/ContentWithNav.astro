@@ -4,9 +4,10 @@ import Segment from '@components/Segment.astro';
 interface Props {
     tableOfContent: ({slug?: string; title: string})[]
     selected: string
+    title: string
 }
 
-const { tableOfContent, selected } = Astro.props
+const { tableOfContent, selected, title} = Astro.props
 
 ---
 
@@ -28,6 +29,7 @@ const { tableOfContent, selected } = Astro.props
 
     <div class="right">
        <Segment>
+            <h1>{title}</h1>
             <slot />
        </Segment>
     </div>

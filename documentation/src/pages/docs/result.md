@@ -1,8 +1,7 @@
 ---
+title: The Result monad for error handling
 layout: ../../layouts/DocLayout.astro
 ---
-
-# The Result monad for error handling
 
 ## Why: try/catch is unsafe
 

@@ -1,8 +1,7 @@
 ---
+title: Tagged unions
 layout: ../../layouts/DocLayout.astro
 ---
-
-# Tagged unions
 
 ## Why: OOP has a problem
 

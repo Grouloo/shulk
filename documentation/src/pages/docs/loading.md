@@ -1,8 +1,7 @@
 ---
+title: The Loading monad
 layout: ../../layouts/DocLayout.astro
 ---
-
-# The Loading monad
 
 ## Use the Loading monad
 

@@ -1,8 +1,7 @@
 ---
+title: Introduction
 layout: ../../layouts/DocLayout.astro
 ---
-
-# Introduction
 
 Programming languages are complicated.
 

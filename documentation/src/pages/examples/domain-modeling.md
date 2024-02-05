@@ -1,8 +1,7 @@
 ---
+title: Domain modeling
 layout: ../../layouts/ExampleLayout.astro
 ---
-
-# Domain modeling
 
 You can use Shulk to modelize your domain as accurately as possible, all while enabling the TypeScript compiler to understand what you are trying to achieve, and get it to help you implementing your domain logic correctly.
 

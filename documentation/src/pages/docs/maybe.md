@@ -1,8 +1,7 @@
 ---
+title: The Maybe monad for optional value handling
 layout: ../../layouts/DocLayout.astro
 ---
-
-# The Maybe monad for optional value handling
 
 ## Why: the Billion Dollar Mistake
 

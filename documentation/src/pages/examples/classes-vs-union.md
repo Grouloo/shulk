@@ -1,8 +1,7 @@
 ---
+title: Classes vs union
 layout: ../../layouts/ExampleLayout.astro
 ---
-
-# Classes vs unions
 
 Nowadays, Object Oriented Programming means using classes with a lot of setters and getters and mutations and calling it a day.
 

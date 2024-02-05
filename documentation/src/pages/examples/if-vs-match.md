@@ -1,8 +1,7 @@
 ---
+title: If vs match
 layout: ../../layouts/ExampleLayout.astro
 ---
-
-# If vs match
 
 Conditions are essential in programming, but sometimes if/else get a little bit difficult to read.
 
