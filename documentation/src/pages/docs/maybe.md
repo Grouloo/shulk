@@ -13,7 +13,92 @@ You will never get a `NullPointerException`, but it won't always make your code 
 
 The Maybe monad is a generic type (and an union under the hood) which can has 2 states: Some (with a value attached), and None (with no value attached).
 
-Let's take our `divide` function from the previous sanction, but this time we will return no value when confronted to a division by 0:
+## Type definition
+
+```ts
+type Maybe<T> = { val: T; _state: "Some" } | { _state: "None" };
+```
+
+## Constructors
+
+### Some
+
+```ts
+function Some<T>(val: T): Maybe<T>;
+```
+
+### None
+
+```ts
+function None(): Maybe<never>;
+```
+
+## Methods
+
+### map
+
+The `map` method allows you to map the value contained to another value.
+
+```ts
+function map<O>(fn: (val: T) => O): Maybe<O>;
+```
+
+### flatMap
+
+The `flatMap` method allows you to map the value contained to another `Maybe`.
+
+```ts
+function flatMap<O>(fn: (val: T) => Maybe<O>): Maybe<O>;
+```
+
+### filter
+
+The `filter` method allows you to map the value contained to an empty `Maybe` if a condition is not met.
+
+```ts
+function filter(condition: (val: T) => boolean): Maybe<T>;
+```
+
+### filterType
+
+The `filterType` method allows you to map the value contained to an empty `Maybe` if a condition is not met, while narrowing down its type.
+
+```ts
+function filterType<O extends T>(condition: (val: T) => val is O): Maybe<O>;
+```
+
+### toResult
+
+The `toResult` method allows you the `Maybe` to a `Result`.
+
+```ts
+function toResult<E>(otherwise: () => E): Result<E, T>;
+```
+
+### Pattern matching
+
+Maybe is an union, which means you can handle it with `match`.
+
+```ts
+import { Maybe, Some, None } from "shulk";
+
+function divide(dividend: number, divisor: number): Maybe<number> {
+  if (divisor == 0) {
+    return None();
+  } else {
+    return Some(dividend / divisor);
+  }
+}
+
+match(divide(2, 2)).case({
+  None: () => console.log("Could not compute result"),
+  Some: ({ val }) => console.log("Result is ", val),
+});
+```
+
+## Examples
+
+Let's take a `divide` function that will return no value when confronted to a division by 0:
 
 ```ts
 import { Maybe, Some, None } from "shulk";
@@ -60,15 +145,4 @@ divide(2, 0)
 
 // toResult() maps the Maybe to a Result monad
 divide(2, 2).toResult(() => "Cannot divide by 0"); // Result<string, number>
-```
-
-### Maybe and pattern matching
-
-Maybe is an union, which means you can handle it with `match`.
-
-```ts
-match(divide(2, 2)).case({
-  None: () => console.log("Could not compute result"),
-  Some: ({ val }) => console.log("Result is ", val),
-});
 ```

@@ -38,9 +38,7 @@ Loading is a State, which means you can handle it with `match`.
 ```ts
 match(loading).case({
   Pending: () => console.log("Now loading...."),
+  Failed: ({ val: err }) => console.log("Got error:", err),
   Done: ({ val }) => console.log("Result is ", val),
-  Failed: ({ val }) => {
-    throw val;
-  },
 });
 ```

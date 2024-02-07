@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro'
 import Container from '@components/Container.astro'
+import InstallText from '@components/InstallText.md'
 ---
 
 <BaseLayout title="Shulk, Write beautiful code that won't crash.">
@@ -19,6 +20,15 @@ import Container from '@components/Container.astro'
 			<a class="btn btn-primary" href="/docs/get-started">Get started</a>
 			<a class="btn" href="https://github.com/Grouloo/shulk" target="_blank">GitHub repo</a>
 		</div>
+		
+		<div class="divider" />
+
+		<div class="installation-guide">
+			<InstallText />
+		</div>
+		
+		
+		<div class="pad" />
 	</Container>
 </BaseLayout>
 
@@ -49,6 +59,18 @@ import Container from '@components/Container.astro'
 
 	.centered {
 		text-align: center;
+		
+	}
+
+	.installation-guide {
+		margin-left: auto;
+		margin-right: auto;
+		max-width: 50%;
+	}
+
+	.pad {
+		width: 1px;
+		margin-bottom: 300px;
 	}
 
 	.btn:hover {

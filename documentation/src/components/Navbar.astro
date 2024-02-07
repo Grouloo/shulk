@@ -11,7 +11,7 @@ const { currentPage } = Astro.props
 	<div class="left">
 		<p>Shulk</p>
 		<a href="/" class={currentPage == '/' ? 'selected' : ''}>Home</a>
-		<a href="/docs/introduction" class={currentPage.includes('/docs') ? 'selected' : ''}>Docs</a>
+		<a href="/docs/" class={currentPage.includes('/docs') ? 'selected' : ''}>Docs</a>
 		<a href="/examples/" class={currentPage.includes('/examples') ? 'selected' : ''}>Examples</a>
 	</div>
 

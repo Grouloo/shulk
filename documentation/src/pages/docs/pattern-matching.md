@@ -105,7 +105,7 @@ match(myTV).with({
 });
 
 match(myTV).case({
-  On: (tv: Television["On"]) => "TV is on!",
-  Off: (tv: Television["Off"]) => "TV is off!",
+  On: (tv) => "TV is on!", // tv is infered as TV["On"]
+  Off: (tv) => "TV is off!", // tv is infered as TV["Off"]
 });
 ```

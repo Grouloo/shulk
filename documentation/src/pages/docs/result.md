@@ -16,9 +16,132 @@ Moreover, in some languages such as TypeScript, we can't even declare what kind 
 
 The Result monad is a generic type (but really an union under the hood) that will force you to handle errors by wrapping your return types.
 
+## Type definition
+
 ```ts
-type Result<ErrType, OkType>
+type Result<ErrType, OkType> =
+  | { val: ErrType; _state: "Err" }
+  | { val: OkType; _state: "Ok" };
 ```
+
+## Constructor
+
+### Err
+
+A Result representing a failure can be constructed with the `Err` function.
+
+```ts
+function Err<T>(val: T): Result<T, never>;
+```
+
+### Ok
+
+A Result representing a success can be constructed with the `Ok` function.
+
+```ts
+function Ok<T>(val: T): Result<never, T>;
+```
+
+## Methods
+
+The `Result` monad exposes several methods to unwrap its value.
+
+You can see a usage of each method in the example section below.
+
+### map
+
+The `map` method allows you to map the success state of a `Result` to a new value.
+
+```ts
+function map<T>(fn: (val: OkType) => T): Result<ErrType, T>;
+```
+
+### flatMap
+
+The `flatMap` method allows you to map the success state of a `Result` to a new `Result`.
+
+```ts
+function flatMap<E, O>(fn: (val: OkType) => Result<E, O>): Result<E, O>;
+```
+
+### flatMapAsync
+
+The `flatMapAsync` method allows you to map the success state of a `Result` to a new `AsyncResult`.
+
+```ts
+function flatMapAsync<E, O>(
+  fn: (val: OkType) => AsyncResult<E, O>,
+): AsyncResult<E, O>;
+```
+
+### mapErr
+
+The `mapErr` method allows you to map the failure state of a `Result` to a new value.
+
+```ts
+function mapErr<T>(fn: (val: ErrType) => T): Result<T, OkType>;
+```
+
+### filter
+
+The `filter` method allows you to map a success state to a failure state if a condition isn't met.
+
+```ts
+function filter<E>(
+  condition: (val: OkType) => boolean,
+  otherwise: () => E,
+): Result<E | ErrType, OkType>;
+```
+
+### filterType
+
+The `filterType` method allows you to map a success state to a failure state if a condition isn't met, while narrowing the type of the success state.
+
+```ts
+function filter<E, O extends OkType>(
+  condition: (val: OkType) => val is O,
+  otherwise: () => E,
+): Result<E, O>;
+```
+
+### toMaybe
+
+The `toMaybe` method allows you to map a `Result` to a `Maybe` monad.
+
+```ts
+function toMaybe(): Maybe<OkType>;
+```
+
+### toLoading
+
+The `toLoading` method allows you to map a `Result` to a `Loading` monad.
+
+```ts
+function toLoading(): Loading<ErrType, OkType>;
+```
+
+## Result and pattern matching
+
+Result is an union, which means you can handle it with `match`.
+
+```ts
+import { Result, Ok, Err } from "shulk";
+
+function divide(dividend: number, divisor: number): Result<string, number> {
+  if (divisor == 0) {
+    return Err("Cannot divide by 0!");
+  } else {
+    return Ok(dividend / divisor);
+  }
+}
+
+match(divide(2, 2)).case({
+  Err: () => console.log("Could not compute result"),
+  Ok: ({ val }) => console.log("Result is ", val),
+});
+```
+
+## Examples
 
 Let's make a function that divides 2 number and can return an error:
 
@@ -28,8 +151,9 @@ import { Result, Ok, Err } from "shulk";
 function divide(dividend: number, divisor: number): Result<string, number> {
   if (divisor == 0) {
     return Err("Cannot divide by 0!");
+  } else {
+    return Ok(dividend / divisor);
   }
-  return Ok(dividend / divisor);
 }
 
 // We can then handle our Result in a few different ways
@@ -102,15 +226,4 @@ divide(4, 2).filterType(
   (res): res is number => res == 1,
   () => "Result is not 1",
 ); // "Result is not 1"
-```
-
-### Result and pattern matching
-
-Result is an union, which means you can handle it with `match`.
-
-```ts
-match(divide(2, 2)).case({
-  Err: () => console.log("Could not compute result"),
-  Ok: ({ val }) => console.log("Result is ", val),
-});
 ```

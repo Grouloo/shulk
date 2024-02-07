@@ -11,11 +11,12 @@ const { tableOfContent, selected, title} = Astro.props
 
 ---
 
-<div class="grid" hx-boost="true">
+<div class="grid">
     <div class="left">
         <Segment>
             {tableOfContent.map((link) => ( link.slug ?
                 <a 
+                    id={link.slug}
                     href={link.slug} 
                     class={link.slug === selected ? 'selected' : ''}
                 >
@@ -23,7 +24,6 @@ const { tableOfContent, selected, title} = Astro.props
                 </a> : <p>{link.title}</p>
             ))}
         </Segment>
-        
     </div>
 
 

@@ -38,3 +38,21 @@ const currentPath = Astro.url.pathname
 	}
 
 </style>
+<style is:global>
+      div[data-rehype-pretty-code-fragment] { background-color: #111; margin: 0; }
+
+	  figure {
+		margin: 0; 
+	  }
+
+      pre > code {
+        font-size: 1.1em;
+    	line-height: 1.45;
+		background-color: #f6f8fa;
+		overflow-x:auto;
+		padding-left: 8px;
+		padding-right: 8px;
+		padding-top: 16px;
+		padding-bottom: 16px;
+      }
+    </style>

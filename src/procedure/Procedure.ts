@@ -18,9 +18,7 @@ export class Procedure<Err = never, Input = never> {
 		return new Procedure<Err | E, O>([...this.instructions, fn] as any)
 	}
 
-	parallelize<E, const O>(
-		...fn: Handler<Input, E, O>[]
-	): Procedure<Err | E, O> {
+	parallelize<E, O>(...fn: Handler<Input, E, O[keyof O]>[]) {
 		// Handler<Input, E, infer O>[]) {
 		return new Procedure<Err | E, O>([...this.instructions, fn] as any)
 	}

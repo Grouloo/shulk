@@ -3,26 +3,23 @@ import Container from '@components/Container.astro';
 import BaseLayout from './BaseLayout.astro'
 import ContentWithNav from '@components/ContentWithNav.astro';
 
-
 const tableOfContent = [
     { title: 'Table of content' },
     {
         title: 'If vs match',
-        slug: 'if-vs-match'
+        slug: '/examples/if-vs-match/'
     },
     {
         title: 'Classes vs unions',
-        slug: 'classes-vs-union'
+        slug: '/examples/classes-vs-union/'
     },
     {
         title: 'Domain modeling',
-        slug: 'domain-modeling'
+        slug: '/examples/domain-modeling/'
     },
 ];
 
 const pathname = Astro.url.pathname
-
-const [,,slug] = pathname.split('/')
 
 const { frontmatter } = Astro.props;
 ---
@@ -31,7 +28,7 @@ const { frontmatter } = Astro.props;
     <Container>
         <ContentWithNav 
             tableOfContent={tableOfContent} 
-            selected={slug as string} 
+            selected={pathname} 
             title={frontmatter.title}        
         >
             <slot />

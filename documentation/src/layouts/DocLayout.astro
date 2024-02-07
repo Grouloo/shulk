@@ -4,54 +4,56 @@ import BaseLayout from './BaseLayout.astro'
 import ContentWithNav from '@components/ContentWithNav.astro';
 
 const tableOfContent = [
-    {title: 'Shulk'},
+    { title: 'Shulk' },
     {
         title: 'Introduction',
-        slug: 'introduction'
+        slug: '/docs/'
     },
     {
         title: 'Get started',
-        slug: 'get-started'
+        slug: '/docs/get-started/'
     },
-    {title: 'Basics'},
+    { title: 'Basics' },
     {
         title: 'Tagged unions',
-        slug: 'tagged-unions'
+        slug: '/docs/tagged-unions/'
     },
     {
         title: 'Pattern matching',
-        slug: 'pattern-matching'
+        slug: '/docs/pattern-matching/'
     },
-    {title: 'Monads'},
+    { title: 'Monads' },
     {
         title: 'Result',
-        slug: 'result'
+        slug: '/docs/result/'
     },
     {
         title: 'Maybe',
-        slug: 'maybe'
+        slug: '/docs/maybe/'
     },
     {
         title: 'Loading',
-        slug: 'loading'
+        slug: '/docs/loading/'
+    }, 
+    { title: 'Async' },
+    {
+        title: 'Procedure',
+        slug: '/docs/procedure/'
     },
     {
-        title: 'Others'
+        title: 'Concurrently',
+        slug: '/docs/concurrently/'
     },
+    { title: 'Others' },
     {
         title: 'Wrappers',
-        slug: 'wrappers',
+        slug: '/docs/wrappers/',
     },
-    {
-        title: 'Procedural programming',
-        slug: 'procedural-programming'
-    }
+   
 ];
 
    
 const pathname = Astro.url.pathname
-
-const [,,slug] = pathname.split('/')
  
 const { frontmatter } = Astro.props;
 ---
@@ -60,7 +62,7 @@ const { frontmatter } = Astro.props;
     <Container>
         <ContentWithNav     
             tableOfContent={tableOfContent}
-            selected={slug as string}
+            selected={pathname}
             title={frontmatter.title}
         >
             <slot />
