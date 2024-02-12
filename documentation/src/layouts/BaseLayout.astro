@@ -1,14 +1,34 @@
 ---
 import Footer from '@components/Footer.astro'
 import Navbar from '@components/Navbar.astro'
+import { match } from 'shulk'
 
 interface Props {
     title: string
+	description: string
 }
 
-const { title } = Astro.props
+const { title, description } = Astro.props
 
 const currentPath = Astro.url.pathname
+
+const slicedDescription = (description)
+    .replace(/\n/g, '')
+    .slice(0, 117)
+    .trim()
+
+	const descriptionLastChar = slicedDescription.slice(
+		slicedDescription.length- 1,
+		slicedDescription.length
+	)
+
+	const trimmedDescription = match(descriptionLastChar).case({
+		'.': () => slicedDescription,
+		'!': () => slicedDescription,
+		_otherwise: () => slicedDescription
+			.trim()
+			.concat('...') 
+	})
 ---
 
 <html lang="en">
@@ -17,6 +37,7 @@ const currentPath = Astro.url.pathname
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={trimmedDescription} />
         <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
 		<title>{ title }</title>
 	</head>

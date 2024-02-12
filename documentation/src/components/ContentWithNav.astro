@@ -11,7 +11,7 @@ const { tableOfContent, selected, title} = Astro.props
 
 ---
 
-<div class="grid">
+<div class="grid" hx-boost="true">
     <div class="left">
         <Segment>
             {tableOfContent.map((link) => ( link.slug ?

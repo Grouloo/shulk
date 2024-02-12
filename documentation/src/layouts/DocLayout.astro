@@ -56,9 +56,11 @@ const tableOfContent = [
 const pathname = Astro.url.pathname
  
 const { frontmatter } = Astro.props;
+
+const description = Astro.props.rawContent() 
 ---
 
-<BaseLayout title={frontmatter.title + '- Shulk'}>
+<BaseLayout title={frontmatter.title + '- Shulk'} description={description}>
     <Container>
         <ContentWithNav     
             tableOfContent={tableOfContent}
