@@ -71,12 +71,28 @@ interface ResultMethod<ErrType, OkType> {
 	flatMap<E, O>(handler: (val: OkType) => Result<E, O>): Result<E | ErrType, O>
 
 	/**
+	 * Returns the new Result monad returned by the handler
+	 * @param handler
+	 */
+	flatMapErr<E, O>(
+		handler: (err: ErrType) => Result<E, O>,
+	): Result<E, OkType | O>
+
+	/**
 	 * Returns the new Result monad wrapped in a Promise returned by the handler
 	 * @param handler
 	 */
 	flatMapAsync<E, O>(
 		handler: (val: OkType) => AsyncResult<E, O>,
 	): AsyncResult<E | ErrType, O>
+
+	/**
+	 * Returns the new Result monad wrapped in a Promise returned by the handler
+	 * @param handler
+	 */
+	flatMapErrAsync<E, O>(
+		handler: (err: ErrType) => AsyncResult<E, O>,
+	): AsyncResult<E, O | OkType>
 
 	/**
 	 * Returns a new Monad result in Ok state if the condition is verified, and a new Monad in Err state otherwise
@@ -211,6 +227,17 @@ class ResultImpl<ErrType, OkType> implements ResultMethod<ErrType, OkType> {
 			})
 	}
 
+	flatMapErr<E, O>(
+		handler: (err: ErrType) => Result<E, O>,
+	): Result<E, OkType | O> {
+		return match(this as Result<ErrType, OkType | O>)
+			.returnType<Result<E, O | OkType>>()
+			.case({
+				Err: ({ val: err }) => handler(err),
+				Ok: ({ val }) => Ok(val),
+			})
+	}
+
 	flatMapAsync<E, O>(
 		handler: (val: OkType) => AsyncResult<E, O>,
 	): AsyncResult<E | ErrType, O> {
@@ -219,6 +246,17 @@ class ResultImpl<ErrType, OkType> implements ResultMethod<ErrType, OkType> {
 			.case({
 				Err: async (result) => Err(result.val),
 				Ok: async ({ val }) => await handler(val),
+			})
+	}
+
+	flatMapErrAsync<E, O>(
+		handler: (err: ErrType) => AsyncResult<E, O>,
+	): AsyncResult<E, O | OkType> {
+		return match(this as Result<ErrType, OkType>)
+			.returnType<AsyncResult<E, O | OkType>>()
+			.case({
+				Err: async ({ val: err }) => await handler(err),
+				Ok: async ({ val }) => Ok(val),
 			})
 	}
 

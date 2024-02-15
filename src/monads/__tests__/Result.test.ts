@@ -175,6 +175,22 @@ describe('.flatMap()', () => {
 	})
 })
 
+describe('.flatMapErr()', () => {
+	test('executes the handler and returns the new monad when original is in Err state', () => {
+		const mapped = FAILED.flatMapErr((err) => Ok(err))
+
+		expect(mapped._state).toBe('Ok')
+		expect(mapped.val).toBeInstanceOf(Error)
+	})
+
+	test('does not execute the handler when the monad is already in Ok state', () => {
+		const mapped = SUCCESS.flatMapErr((err) => Ok(err))
+
+		expect(mapped._state).toBe('Ok')
+		expect(mapped.val).toBe(1)
+	})
+})
+
 describe('match tests', () => {
 	const HANDLED_ERR = 'handled err path'
 
