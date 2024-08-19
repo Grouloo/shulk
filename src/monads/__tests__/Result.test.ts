@@ -138,7 +138,7 @@ describe('.filter()', () => {
 		expect(mapped.val).toBe(1)
 	})
 
-	test(`returns the provided fallback when the value does'nt pass the filter`, () => {
+	test(`returns the provided fallback when the value doesn't pass the filter`, () => {
 		const mapped = divide(4, 2).filter(
 			(val): val is number => val == 1,
 			() => false,
